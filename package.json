@@ -1,0 +1,24 @@
+{
+  "name": "sudoku2",
+  "version": "1.0.0",
+  "description": "Sudoku game.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Katie Dotson",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-handlebars": "^3.0.0",
+    "express-session": "^1.15.6",
+    "mongoose": "^5.0.0",
+    "passport": "^0.4.0",
+    "passport-google-oauth20": "^1.0.0",
+    "routes": "^2.1.0"
+  }, 
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "mocha": "^5.0.0"
+  }
+}
