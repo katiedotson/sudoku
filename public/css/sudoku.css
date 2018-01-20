@@ -1,0 +1,204 @@
+body{
+    background-color: rgb(255, 255, 255);
+    font-family: 'Lato', sans-serif;
+    text-decoration: none;
+} 
+.puzzle{
+    position: relative;
+    margin: auto;
+    display: flex;
+    background-color: black;
+}  
+.spot{
+    background-color: rgb(255, 255, 255);
+    display: table-cell;
+    font-size: 1.6em; 
+    text-align: center;
+    align-items: center;
+    vertical-align: middle;  
+    padding:  none;
+} 
+#userInput{
+    display: flex-block;
+    justify-content:center;
+    align-items: center;
+    text-align: center;
+    margin:auto;
+    box-sizing: content-box;
+}
+button{
+    border: 1px solid;
+    border-radius: 5px;
+    height: 20%;
+    margin-top: 1%;
+    margin-left: auto;
+    margin-right: auto;
+}
+.valueBox{
+    height: 2.5em;
+    vertical-align: top;
+    display: none;
+    background: transparent;
+}
+i{
+    padding: none;
+}
+#controls{
+    height: 7em;
+    margin-top:  1em;
+}
+.flipswitches{
+    float: left;
+    width: 50%;
+    margin-bottom: 1em;
+}  
+#play{
+    border: none;
+    background-color: rgb(89, 209, 109);
+    display: block;
+    margin-top: 2em;
+    height: 4em;
+    width: 100%;
+}
+#createNew{
+    background-color: rgb(89, 209, 109);
+    border-radius: 3px;
+    border: none;
+    display: none;
+    width: 45%;
+    height: 50%;
+}
+#createNotes{
+    background-color: rgb(89, 117, 209);
+    border-radius: 3px;
+    border: none;
+    display: none;
+    width: 45%;
+    height: 50%;
+}
+#exitNotes{
+    background-color: rgb(244, 164, 66);
+    border-radius: 3px;
+    border: 2px solid black;
+    display: none;
+    width: 45%;
+    height: 50%;
+}
+#hint{
+    background-color: rgb(224, 79, 26);
+    border-radius: 3px;
+    border: none;
+    display: none;
+    width: 22.5%;
+    height: 50%;
+}
+#oops{
+    background-color: rgb(226, 244, 66);
+    border-radius: 3px;
+    border: none;
+    display: none;
+    width: 22.5%;
+    height: 50%;
+}
+
+#exitOops{
+    background-color: rgb(255, 102, 0);
+    border-radius: 3px;
+    border: 2px solid black;
+    display: none;
+    width: 22.5%;
+    height: 50%;
+}
+
+#help{
+    background-color: rgb(79, 176, 245);
+    border-radius: 3px;
+    border: none;
+    display: none;
+    width: 45%;
+    height: 50%;
+}
+.userNote{
+    height: 50%;
+    width: 50%;
+    float: left;
+    margin: none;
+    margin-top: none;
+    font-size: .5em;
+}
+#helpModal{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 1, 26, 0.657);
+    z-index: 1;
+    position: absolute;
+    text-align:  center;
+    color: white;
+    overflow: scroll;
+}
+#exitHelpModal{
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 3px;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10%;
+    color: white;
+}
+.helpfulness{
+    display: none;
+}
+.helpText{
+    display: none;
+    text-align: justify;
+    margin-left: 10%;
+    margin-right: 10%;
+    padding-top: 10%;
+    padding-bottom: auto;
+}
+#loadModal{
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 1, 26, 0.657);
+    z-index: 1;
+    position: absolute;
+    text-align:  center;
+    color: white;
+    overflow: scroll;
+}
+#puzzleFinishedModal{
+    display: none;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 1, 26, 0.657);
+    z-index: 1;
+    position: absolute;
+    text-align:  center;
+    color: white;
+    overflow: scroll;
+}
+#exitFinishedModal{
+    background-color: rgba(255, 255, 255, 0);
+    border-radius: 3px;
+    border: none;
+    margin-left: auto;
+    margin-right: auto;
+    width: 10%;
+    color: white;
+}
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    top: 40%;
+    position: relative;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

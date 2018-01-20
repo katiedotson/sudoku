@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="
+        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.js"></script>
+    <link href="https://code.jquery.com/ui/1.10.4/themes/ui-darkness/jquery-ui.css" rel="stylesheet">
+    <link href="https://code.jquery.com/mobile/1.5.0-alpha.1/jquery.mobile-1.5.0-alpha.1.min.css" rel="stylesheet">
+    <script src="/scripts/sudoku.js"></script>
+    <script src="/scripts/puzzleMods.js"></script>
+    <script src="/scripts/userInterface.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link rel="stylesheet" href="/css/sudoku.css">
+    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <title>Sudoku</title>
+</head>
+<body>
+    <!-- <div id = "loadModal">
+        <div class="loader"></div>
+</div> -->
+<div id = "puzzleFinishedModal">
+        <div id = "finishedPuzzleText" class="helpText"></div>
+        <button id="exitFinishedModal">
+            <i class="material-icons">check_circle</i>
+        </button>
+</div>
+<div id="helpModal" class="helpfulness">
+    <div id="hardModeColorMode" class="helpText">
+        1. click the colored button at the bottom of the screen and then click a spot in the puzzle to add it. when you do,
+        <i
+            class="material-icons">grain</i> will appear so you can know which colors you added.
+            <br>
+            <br> 2. when yr done with a value, a
+            <i class="material-icons">done</i> will appear & you can no longer change or remove those colors.
+            <br>
+            <br> 3. to remove a color you added from the puzzle, click
+            <i>oops</i> and then spot you want to remove the color from. to quit removing colors, click the
+            <i>OOPS</i> button.
+            <br>
+            <br>4. if you wanna add notes, hit
+            <i>add notes</i> and select the color you wanna add followed by the spot you wanna add it to. to stop adding
+            notes, click
+            <i>done adding notes</i>.
+            <br>
+            <br> 5. you only get 3 hints, so use em wisely.
+            <br>
+            <br> 6. if you wanna start over, hit
+            <i>begin again</i>
+    </div>
+    <div id="hardModeNumberMode" class="helpText">
+        1. to add a number, click the number you wanna add followed by the spot you wanna add it to.
+        <br>
+        <br> 2. when you have completed a value (and all of your choices were correct), its button will turn green and you
+        can no longer remove them from the puzzle.
+        <br>
+        <br> 3. to remove a number you added, click
+        <i>oops</i> followed by the spot you want to remove it from. to quit removing numbers, click the
+        <i>OOPS</i> button.
+        <br>
+        <br> 4. to add notes to a spot, click
+        <i>add notes</i>, followed by the number you want to add and then the spot you wanna add it to. to stop adding notes,
+        click
+        <i>done adding notes</i>.
+        <b>
+            <br> 5. you only get three hints, so use em wisely.
+            <br>
+            <br> 6. hit
+            <i>begin again</i> to start a new puzzle.
+    </div>
+    <div id="easyModeColorMode" class="helpText">
+        1. choose a color to add at the bottom of the screen and then click a spot on the puzzle to add it.
+        <br>
+        <br> 2. when the puzzle shakes, it means you are trying to add a color to a spot in which it does not belong.
+        <br>
+        <br> 3. to start a new puzzle, click
+        <i>begin again</i>
+    </div>
+    <div id="easyModeNumberMode" class="helpText">
+        1. choose a number to add at the bottom of the screen and then click a spot on the puzzle to add it.
+        <br>
+        <br> 2. when the puzzle shakes, it means you are trying to add a number to a spot in which it does not belong.
+        <br>
+        <br> 3. to start a new puzzle, click
+        <i>begin again</i>
+    </div>
+    <button id="exitHelpModal" class="helpfulness">
+        <i class="material-icons">check_circle</i>
+    </button>
+</div>
+<div class="puzzle">
+    <div class="spot" id="1"></div>
+    <div class="spot" id="2"></div>
+    <div class="spot" id="3"></div>
+    <div class="spot" id="4"></div>
+    <div class="spot" id="5"></div>
+    <div class="spot" id="6"></div>
+    <div class="spot" id="7"></div>
+    <div class="spot" id="8"></div>
+    <div class="spot" id="9"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="10"></div>
+    <div class="spot" id="11"></div>
+    <div class="spot" id="12"></div>
+    <div class="spot" id="13"></div>
+    <div class="spot" id="14"></div>
+    <div class="spot" id="15"></div>
+    <div class="spot" id="16"></div>
+    <div class="spot" id="17"></div>
+    <div class="spot" id="18"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="19"></div>
+    <div class="spot" id="20"></div>
+    <div class="spot" id="21"></div>
+    <div class="spot" id="22"></div>
+    <div class="spot" id="23"></div>
+    <div class="spot" id="24"></div>
+    <div class="spot" id="25"></div>
+    <div class="spot" id="26"></div>
+    <div class="spot" id="27"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="28"></div>
+    <div class="spot" id="29"></div>
+    <div class="spot" id="30"></div>
+    <div class="spot" id="31"></div>
+    <div class="spot" id="32"></div>
+    <div class="spot" id="33"></div>
+    <div class="spot" id="34"></div>
+    <div class="spot" id="35"></div>
+    <div class="spot" id="36"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="37"></div>
+    <div class="spot" id="38"></div>
+    <div class="spot" id="39"></div>
+    <div class="spot" id="40"></div>
+    <div class="spot" id="41"></div>
+    <div class="spot" id="42"></div>
+    <div class="spot" id="43"></div>
+    <div class="spot" id="44"></div>
+    <div class="spot" id="45"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="46"></div>
+    <div class="spot" id="47"></div>
+    <div class="spot" id="48"></div>
+    <div class="spot" id="49"></div>
+    <div class="spot" id="50"></div>
+    <div class="spot" id="51"></div>
+    <div class="spot" id="52"></div>
+    <div class="spot" id="53"></div>
+    <div class="spot" id="54"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="55"></div>
+    <div class="spot" id="56"></div>
+    <div class="spot" id="57"></div>
+    <div class="spot" id="58"></div>
+    <div class="spot" id="59"></div>
+    <div class="spot" id="60"></div>
+    <div class="spot" id="61"></div>
+    <div class="spot" id="62"></div>
+    <div class="spot" id="63"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="64"></div>
+    <div class="spot" id="65"></div>
+    <div class="spot" id="66"></div>
+    <div class="spot" id="67"></div>
+    <div class="spot" id="68"></div>
+    <div class="spot" id="69"></div>
+    <div class="spot" id="70"></div>
+    <div class="spot" id="71"></div>
+    <div class="spot" id="72"></div>
+</div>
+<div class="puzzle">
+    <div class="spot" id="73"></div>
+    <div class="spot" id="74"></div>
+    <div class="spot" id="75"></div>
+    <div class="spot" id="76"></div>
+    <div class="spot" id="77"></div>
+    <div class="spot" id="78"></div>
+    <div class="spot" id="79"></div>
+    <div class="spot" id="80"></div>
+    <div class="spot" id="81"></div>
+</div>
+</div>
+<div id="userInput">
+    <div id="settings">
+        <div class="ui-field-contain">
+            <label for="spotsToShow">add/remove values: </label>
+            <input type="range" name="spotsToShow" id="spotsToShow" min="17" max="52" value="17">
+        </div>
+        <div class="flipswitches">
+            <label for="colorMode">feeling colorful?</label>
+            <input data-role="flipswitch" name="colorMode" id="colorMode" data-off-text="no" data-on-text="yes" type="checkbox">
+        </div>
+        <div class="flipswitches">
+            <label for="hardMode">hard mode?</label>
+            <input data-role="flipswitch" name="hardMode" id="hardMode" data-off-text="no" data-on-text="yes" type="checkbox">
+        </div>
+
+        <button type="button" id="play">let's go</button>
+    </div>
+
+    <button class="valueBox" id="value1">
+        1
+    </button>
+    <button class="valueBox" id="value2">
+        2
+    </button>
+    <button class="valueBox" id="value3">
+        3
+    </button>
+    <button class="valueBox" id="value4">
+        4
+    </button>
+    <button class="valueBox" id="value5">
+        5
+    </button>
+    <button class="valueBox" id="value6">
+        6
+    </button>
+    <button class="valueBox" id="value7">
+        7
+    </button>
+    <button class="valueBox" id="value8">
+        8
+    </button>
+    <button class="valueBox" id="value9">
+        9
+    </button>
+    <div id="controls">
+        <button id="createNotes" class="control">
+            add notes
+        </button>
+        <button id="exitNotes" class="control">
+            done adding notes
+        </button>
+        <button id="oops" class="control">
+            oops
+        </button>
+        <button id="exitOops" class="control">
+            OOPS!
+        </button>
+        <button id="hint" class="control">
+            hint???
+        </button>
+        <button id="createNew" class="control">
+            begin again
+        </button>
+        <button id="help" class="control">
+            help!
+        </button>
+    </div>
+</div>
+</body>
+</html>

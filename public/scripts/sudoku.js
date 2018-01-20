@@ -1,5 +1,4 @@
-var Sudoku = createSudoku();
-module.exports = Sudoku;
+
 
 //create Sudoku object; populate its Array with numbers randomly while ensuring no numbers repeat
 function CreateSudokuArray() {
@@ -152,6 +151,7 @@ function getRows(box) {
     }
     return rows;
 }
+
 function getColumns(box) {
     var columns = [];
 
@@ -169,6 +169,7 @@ function getColumns(box) {
     }
     return columns;
 }
+
 function getBox0ColumnAndRow(g) {
     var box0Row;
     var box0Column;
@@ -211,6 +212,9 @@ function getBox0ColumnAndRow(g) {
     var box0ColumnAndRow = [box0Row, box0Column];
     return box0ColumnAndRow;
 }
+
+
+
 function getSpotObject(row, column, isUsed, value, id, userInput, isCompleted) {
     var spot = {
         "IsUsedAtBeginning": isUsed,
@@ -221,9 +225,10 @@ function getSpotObject(row, column, isUsed, value, id, userInput, isCompleted) {
         "UserInput": null,
         "IsCompleted": false,
         "UserNotes": []
-    };
+    }
     return spot;
 }
+
 function createEmptySudokuArray() {
 
     var array = [];
@@ -235,6 +240,7 @@ function createEmptySudokuArray() {
     }
     return array;
 }
+
 function getId(row, column) {
     var firstRowValue = column + 1;
     var id = firstRowValue + row * 9;
