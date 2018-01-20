@@ -8,7 +8,7 @@ router.get('/', function(req, res){
     res.render('sudoku');
 });
 
-router.get('sudokuObject', (req, res) =>{
+router.get('/sudokuObject', (req, res) =>{
     res.json(sudoku);
 });
 

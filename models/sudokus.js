@@ -1,13 +1,25 @@
 var Sudoku = createSudoku();
 module.exports = Sudoku;
 
-//create Sudoku object; populate its Array with numbers randomly while ensuring no numbers repeat
-function CreateSudokuArray() {
-
-    var Sudoku = {
-        "DidntWork": true, "Array": [], "NumberToShow": 17, "NumberShown": 0, "IncorrectInput": 0,
-        "BoxesClicked": 0, "HighlightColor": "#d3e4ff", "CompletedColor": "#6bffa5", "NotesMode": false, "OopsMode": false,
-        "IdOfCurrentValue": "0", "Playing": false, "ColorMode": false, "HardMode": false, "CurrentValue": null, "Hints": 3,
+//Sudoku object init
+function getSudokuObject(){
+    var SudokuObject = {
+        "DidntWork": true, 
+        "Array": [], 
+        "NumberToShow": 17, 
+        "NumberShown": 0, 
+        "IncorrectInput": 0,
+        "BoxesClicked": 0, 
+        "HighlightColor": "#d3e4ff", 
+        "CompletedColor": "#6bffa5", 
+        "NotesMode": false, 
+        "OopsMode": false,
+        "IdOfCurrentValue": "0", 
+        "Playing": false, 
+        "ColorMode": false, 
+        "HardMode": false, 
+        "CurrentValue": null, 
+        "Hints": 3,
         "ColorArray":
             [{ "Value": 1, "Color": "#f75df2" },
             { "Value": 2, "Color": "#f42318" },
@@ -19,6 +31,13 @@ function CreateSudokuArray() {
             { "Value": 8, "Color": "#3cace0" },
             { "Value": 9, "Color": "#a54df2" }]
     };
+
+    return SudokuObject;
+}
+
+//create Sudoku object; populate its Array with numbers randomly while ensuring no numbers repeat
+function createSudokuArray() {
+    var Sudoku = getSudokuObject();
     Sudoku.Array = createEmptySudokuArray();
     var didNotWork = false;
     var boxArray = getBoxArray();
@@ -113,6 +132,7 @@ function CreateSudokuArray() {
     }
     return Sudoku;
 }
+
 function getBoxArray() {
     var boxArray = [];
     for (x = 0; x < 9; x++) {
@@ -120,6 +140,7 @@ function getBoxArray() {
     }
     return boxArray;
 }
+
 function getBoolArray() {
     var boolArray = [];
     for (p = 0; p < 9; p++) {
@@ -130,12 +151,14 @@ function getBoolArray() {
     }
     return boolArray;
 }
+
 function getRandomInt(min, max) {
     max += 1;
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
 }
+
 function getRows(box) {
     var rows = [];
     if (box < 3) {
@@ -152,6 +175,7 @@ function getRows(box) {
     }
     return rows;
 }
+
 function getColumns(box) {
     var columns = [];
 
@@ -169,6 +193,7 @@ function getColumns(box) {
     }
     return columns;
 }
+
 function getBox0ColumnAndRow(g) {
     var box0Row;
     var box0Column;
@@ -211,6 +236,7 @@ function getBox0ColumnAndRow(g) {
     var box0ColumnAndRow = [box0Row, box0Column];
     return box0ColumnAndRow;
 }
+
 function getSpotObject(row, column, isUsed, value, id, userInput, isCompleted) {
     var spot = {
         "IsUsedAtBeginning": isUsed,
@@ -224,6 +250,7 @@ function getSpotObject(row, column, isUsed, value, id, userInput, isCompleted) {
     };
     return spot;
 }
+
 function createEmptySudokuArray() {
 
     var array = [];
@@ -235,15 +262,17 @@ function createEmptySudokuArray() {
     }
     return array;
 }
+
 function getId(row, column) {
     var firstRowValue = column + 1;
     var id = firstRowValue + row * 9;
     return id;
 }
+
 function createSudoku() {
-    var newSudoku = CreateSudokuArray();
+    var newSudoku = createSudokuArray();
     while (newSudoku.DidntWork) {
-        newSudoku = CreateSudokuArray();
+        newSudoku = createSudokuArray();
     }
     return newSudoku;
 }

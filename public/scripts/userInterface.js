@@ -1,15 +1,23 @@
-"use strict";
-//$("#loadModal").show();
-$(document).ready(function () {
-    setSizes();
-    setMargins();
-    var Sudoku = createSudoku();
+/* jshint esversion: 6 */
 
-    Sudoku = setUpSettings(Sudoku);
-    Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
-    Sudoku = populateSpots(Sudoku);
-    Sudoku = registerUI(Sudoku);
-    //$("#loadModal").hide();
+"use strict";
+$("#loadModal").show();
+$(document).ready(()=> {
+    var Sudoku;
+
+    var promise = $.getJSON('/sudokuObject');
+
+        promise.done((data)=>{
+        Sudoku = data;
+        setSizes();
+        setMargins();
+
+        Sudoku = setUpSettings(Sudoku);
+        Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
+        Sudoku = populateSpots(Sudoku);
+        Sudoku = registerUI(Sudoku);
+
+    });    
 });
 //REGISTER UI 
 //                      ****EVENTS**** 
@@ -283,6 +291,7 @@ function setUpSettings(sudoku) {
 }
 //----POPULATE SPOTS: show values for the puzzle
 function populateSpots(sudoku) {
+    console.log(sudoku);
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
