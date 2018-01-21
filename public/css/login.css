@@ -1,0 +1,57 @@
+#doAquariumText{
+    color: rgb(255, 82, 2);
+    font-size: 3em;
+    margin-top: 10px;
+    font-family: 'Slabo 27px', serif;
+    text-align: center;
+    margin-right: 10px;
+}
+
+#wrapper{
+    margin: auto;
+    position: fixed;
+    border: 2px solid;
+    border-color: rgb(9, 35, 148);
+    border-radius: 20px;
+    background-color: white;
+}
+
+#google{
+    width: 30%;
+    margin-top: 10%;
+    margin-left: 35%;
+}
+
+#options{
+    width: 30%;
+    margin-top: 10%;
+    margin-left: 35%;
+    
+}
+
+#back{
+
+}
+button {
+    font-family: 'Slabo 27px', serif;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1em;
+    width: 48%;
+    height: 100px;
+    float: left;
+    margin-right: 1%;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    background-color: white; 
+    color: black; 
+    border: 1px solid #008CBA;
+}
+button:hover {
+    background-color: #008CBA;
+    color: white;
+}

@@ -1,0 +1,46 @@
+#doAquariumText{
+    color: rgb(255, 82, 2);
+    font-size: 3em;
+    margin-top: 30%;
+    font-family: 'Slabo 27px', serif;
+    text-align: right;
+    margin-right: 10px;
+}
+
+#wrapper{
+    margin: auto;
+    position: fixed;
+    border: 2px solid;
+    border-color: rgb(9, 35, 148);
+    border-radius: 20px;
+    background-color: white;
+}
+
+#menu{
+    font-family: 'Slabo 27px', serif;
+    font-size: 3em;
+    margin-left: 10px;
+}
+
+a{
+    text-decoration: none;
+}
+#explore{
+    display: inline;
+    color: rgb(9, 35, 148);
+    margin: auto;
+}
+
+#login{
+    display: inline-block;
+    color: rgb(148, 9, 51);
+    margin: auto;
+}
+
+#login:hover{
+    color: aqua;
+}
+
+#explore:hover{
+    color: rgb(110, 39, 204);
+}
