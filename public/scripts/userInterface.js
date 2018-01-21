@@ -1,24 +1,39 @@
 /* jshint esversion: 6 */
 
+
 "use strict";
 $("#loadModal").show();
-$(document).ready(()=> {
-    var Sudoku;
+$(document).ready(() => {
 
-    var promise = $.getJSON('/sudokuObject');
 
-        promise.done((data)=>{
-        Sudoku = data;
-        setSizes();
-        setMargins();
+         var Sudoku;
 
-        Sudoku = setUpSettings(Sudoku);
-        Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
-        Sudoku = populateSpots(Sudoku);
-        Sudoku = registerUI(Sudoku);
+        var promise = $.getJSON('/sudokuObject');
 
-    });    
+            promise.done((data)=>{
+            Sudoku = data;
+            setSizes();
+            setMargins();
+
+            Sudoku = setUpSettings(Sudoku);
+            Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
+            Sudoku = populateSpots(Sudoku);
+            registerUI(Sudoku);
+
+        });  
+
+
 });
+
+function updateServer(sudoku) {
+    var sudokuToSend = JSON.stringify(sudoku);
+    $.ajax('/sudokuObject', {
+        contentType: 'application/json',
+        method: 'POST',
+        data: sudokuToSend
+    });
+}
+
 //REGISTER UI 
 //                      ****EVENTS**** 
 function registerUI(sudoku) {
@@ -45,6 +60,7 @@ function registerUI(sudoku) {
                 sudoku = populateSpots(sudoku);
             }
         }
+        updateServer(sudoku);
         return sudoku;
     });
     //LETS GO 
@@ -57,13 +73,14 @@ function registerUI(sudoku) {
             showHardModeInput();
         }
         showAndHideUserInputForLetsGo(sudoku);
-
+        updateServer(sudoku);
         return sudoku;
     });
     //CREATE NEW 
     $("#createNew").on("click", function (event, ui) {
         $("#loadModal").show();
         sudoku = resetPuzzle(sudoku);
+        updateServer(sudoku);
         return sudoku;
     });
     //PUZZLE DIV
@@ -77,6 +94,7 @@ function registerUI(sudoku) {
                 sudoku = hardModeActionForPuzzleDiv(sudoku, id);
             }
         }
+        updateServer(sudoku);
         return sudoku;
     });
     //VALUE BOXES
@@ -100,6 +118,7 @@ function registerUI(sudoku) {
                 }
             }
         }
+        updateServer(sudoku);
         return sudoku;
     });
     //CREATE NOTES 
@@ -115,7 +134,7 @@ function registerUI(sudoku) {
             $("#exitNotes").show();
             $("#createNotes").hide();
             highlightValueBox(sudoku, sudoku.IdOfCurrentValue);
-
+            updateServer(sudoku);
             return sudoku;
         }
     });
@@ -125,6 +144,7 @@ function registerUI(sudoku) {
         $("#exitNotes").hide();
         $("#createNotes").show();
         highlightValueBox(sudoku, sudoku.IdOfCurrentValue);
+        updateServer(sudoku);
         return sudoku;
     });
     //OOPS
@@ -140,6 +160,7 @@ function registerUI(sudoku) {
             $("#exitOops").show();
 
             highlightValueBox(sudoku, sudoku.IdOfCurrentValue);
+            updateServer(sudoku);
             return sudoku;
         }
     });
@@ -149,6 +170,7 @@ function registerUI(sudoku) {
         $("#exitOops").hide();
         sudoku.OopsMode = false;
         sudoku.NotesMode = false;
+        updateServer(sudoku);
         return sudoku;
     });
     //COLOR MODE SELECTED
@@ -161,6 +183,7 @@ function registerUI(sudoku) {
             sudoku.ColorMode = true;
             sudoku = populateSpotsForColorMode(sudoku);
         }
+        updateServer(sudoku);
         return sudoku;
     });
     //HARD MODE SELECTED
@@ -171,12 +194,14 @@ function registerUI(sudoku) {
         else {
             sudoku.HardMode = true;
         }
+        updateServer(sudoku);
         return sudoku;
     });
     //HINT
     $("#hint").on("click", function (event, ui) {
         if (sudoku.Playing) {
             sudoku = giveAHint(sudoku);
+            updateServer(sudoku);
             return sudoku;
         }
     });
@@ -202,7 +227,7 @@ function registerUI(sudoku) {
         $("#exitHelpModal").hide();
         $(".helpfulness").fadeOut();
     });
-    $("#exitFinishedModal").on("click", function(event, ui){
+    $("#exitFinishedModal").on("click", function (event, ui) {
         $("#puzzleFinishedModal").hide();
         $("#finishedPuzzleText").html("");
         $(".helpText").hide();
@@ -238,7 +263,7 @@ function setSizes() {
 
     $("#userInput").css("width", puzzleWidth);
     $(".valueBox").css("width", spotWidth * .9);
-    
+
     $("#settings").css("width", puzzleWidth);
 
     $("#helpModal").css("width", windowWidth);
@@ -291,7 +316,6 @@ function setUpSettings(sudoku) {
 }
 //----POPULATE SPOTS: show values for the puzzle
 function populateSpots(sudoku) {
-    console.log(sudoku);
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
@@ -768,14 +792,14 @@ function showHint(sudoku, spotToShow) {
         var color = getColor(sudoku, spotToShow.Value);
         $("#" + spotToShow.Id).css("background-color", color);
         $("#" + spotToShow.Id).html('<i class="material-icons">stars</i>');
-        if(sudoku.CurrentValue == spotToShow.Value){
+        if (sudoku.CurrentValue == spotToShow.Value) {
             $("#" + spotToShow.Id).css({ "border-radius": "50px", "transition": "border-radius 500ms" });
         }
     }
     else {
         $("#" + spotToShow.Id).css("color", "green");
         $("#" + spotToShow.Id).html(spotToShow.Value);
-        if(sudoku.CurrentValue == spotToShow.Value){
+        if (sudoku.CurrentValue == spotToShow.Value) {
             $("#" + spotToShow.Id).animate({ "backgroundColor": sudoku.HighlightColor }, { "duration": "slow" });
         }
     }
@@ -791,7 +815,7 @@ function showHint(sudoku, spotToShow) {
     }
 }
 //----RESET PUZZLE
-function resetPuzzle(sudoku){
+function resetPuzzle(sudoku) {
     removeRoundedCornersAndUserInput();
     makeValueBoxesNumbers();
     sudoku = createSudoku();
@@ -802,16 +826,16 @@ function resetPuzzle(sudoku){
     return sudoku;
 }
 //DISPLAY FINISHED PUZZLE MODAL
-function displayFinishedPuzzleModal(sudoku){
+function displayFinishedPuzzleModal(sudoku) {
     $(".helpText").show();
     $("#puzzleFinishedModal").show();
-    if(!sudoku.HardMode){
+    if (!sudoku.HardMode) {
         $("#finishedPuzzleText").html('Great job! You clicked on ' + sudoku.BoxesClicked + " boxes; Only " + sudoku.IncorrectInput + " of them were wrong.");
     }
-    else{
+    else {
         $("#finishedPuzzleText").html('Great job! You finished the puzzle!');
     }
 }
-function hideLoadModal(){
+function hideLoadModal() {
     $("#loadModal").hide();
 }

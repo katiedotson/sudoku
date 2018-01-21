@@ -4,6 +4,7 @@ const express = require('express');
 const credentials = require('./config/credentials.js');
 const routes = require('./routes/router.js');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 var app = express();
 app.set('port', process.env.PORT || 5000);
@@ -13,6 +14,9 @@ app.set('views', (__dirname + '/views'));
 
 //STATIC PATHS
 app.use(express.static(__dirname + '/public'));
+
+//BODY PARSER
+app.use(bodyParser.json());
 
 //ROUTES
 app.use('/', routes);
