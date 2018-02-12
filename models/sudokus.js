@@ -31,7 +31,6 @@ function getSudokuObject(){
             { "Value": 8, "Color": "#3cace0" },
             { "Value": 9, "Color": "#a54df2" }]
     };
-
     return SudokuObject;
 }
 

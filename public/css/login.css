@@ -8,12 +8,14 @@
 }
 
 #wrapper{
-    margin: auto;
-    position: fixed;
+    /* margin: auto;
+    position: fixed; */
     border: 2px solid;
     border-color: rgb(9, 35, 148);
     border-radius: 20px;
     background-color: white;
+    /* height: 100%;
+    width: 100%; */
 }
 
 #google{
@@ -29,9 +31,9 @@
     
 }
 
-#back{
+/* #back{
 
-}
+} */
 button {
     font-family: 'Slabo 27px', serif;
     background-color: #4CAF50; /* Green */

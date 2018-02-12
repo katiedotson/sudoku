@@ -1,17 +1,19 @@
 /*jshint esversion: 6*/
 
-$(document).ready(()=>{
+//window.location.reload();
+$(document).ready(function(){
     setSizes();
-    window.addEventListener('resize', setSizes, true);
+    //window.addEventListener('resize', setSizes, true);
+    //registerUI();
 });
 
 function setSizes(){
-    var height = window.innerHeight;
-    var width = window.innerWidth;
-    $('#wrapper').css({
-        height :  height,
-        width : width
-    });
+    alert("called");
+    var windowHeight = window.innerHeight;
+    var windowWidth = window.innerWidth;
+    $('#wrapper').height(windowHeight);
+    $('#wrapper').width(windowWidth);
+
 }
 
 function registerUI(){

@@ -3,27 +3,26 @@
 
 "use strict";
 $("#loadModal").show();
-$(document).ready(() => {
-
-
-         var Sudoku;
-
-        var promise = $.getJSON('/sudokuObject');
-
-            promise.done((data)=>{
-            Sudoku = data;
-            setSizes();
-            setMargins();
-
-            Sudoku = setUpSettings(Sudoku);
-            Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
-            Sudoku = populateSpots(Sudoku);
-            registerUI(Sudoku);
-
-        });  
-
-
+$(document).ready(function(){
+    startup();
 });
+
+function startup(){
+    var Sudoku;
+    var promise = $.getJSON('/sudokuObject');
+    promise.done((data)=>{
+        Sudoku = data;
+        setSizes();
+        setMargins();
+        showAndHideUserInputForCreateNew();
+        removeRoundedCornersAndUserInput();
+        makeValueBoxesNumbers();
+        Sudoku = setUpSettings(Sudoku);
+        Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
+        Sudoku = populateSpots(Sudoku);
+        registerUI(Sudoku);
+    });     
+}
 
 function updateServer(sudoku) {
     var sudokuToSend = JSON.stringify(sudoku);
@@ -33,7 +32,6 @@ function updateServer(sudoku) {
         data: sudokuToSend
     });
 }
-
 //REGISTER UI 
 //                      ****EVENTS**** 
 function registerUI(sudoku) {
@@ -79,9 +77,7 @@ function registerUI(sudoku) {
     //CREATE NEW 
     $("#createNew").on("click", function (event, ui) {
         $("#loadModal").show();
-        sudoku = resetPuzzle(sudoku);
-        updateServer(sudoku);
-        return sudoku;
+        startup();
     });
     //PUZZLE DIV
     $(".puzzle div").on("click", function (event, ui) {
@@ -362,8 +358,10 @@ function highlightInPuzzle(sudoku) {
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             var spot = sudoku.Array[row][column];
+            
             if (!sudoku.HardMode) {
                 if (spot.Value == sudoku.CurrentValue && spot.IsUsedAtBeginning) {
+                   
                     var idOfCurrentValue = spot.Id;
                     if (sudoku.ColorMode) {
                         $("#" + idOfCurrentValue).css({ "border-radius": "50px", "transition": "border-radius 500ms" });
@@ -375,6 +373,7 @@ function highlightInPuzzle(sudoku) {
             }
             else {
                 if ((spot.Value == sudoku.CurrentValue && spot.IsUsedAtBeginning) || spot.UserInput == sudoku.CurrentValue) {
+                    console.log(spot);
                     var idOfCurrentValue = spot.Id;
                     if (sudoku.ColorMode) {
                         $("#" + idOfCurrentValue).css({ "border-radius": "50px", "transition": "border-radius 500ms" });
@@ -603,6 +602,7 @@ function easyModeActionForPuzzleDiv(sudoku, id) {
         if (decision) {
             sudoku = addUserInputToSudokuArray(sudoku, id);
             displayUserInputSudokuForEasyMode(sudoku, id);
+            sudoku.NumberCompleted++;
         }
         else {
             shakePuzzle();
@@ -619,8 +619,7 @@ function easyModeActionForPuzzleDiv(sudoku, id) {
                 $("#value" + sudoku.CurrentValue).animate({ "backgroundColor": sudoku.CompletedColor }, { "duration": "slow" });
             }
         }
-        var puzzleCompleted = checkIfPuzzleCompleted(sudoku);
-        if (puzzleCompleted) {
+        if (sudoku.NumberCompleted == 81) {
             sudoku = finishPuzzle(sudoku);
         }
     }
@@ -637,10 +636,6 @@ function hardModeActionForPuzzleDiv(sudoku, id) {
         }
         else {
             sudoku = addUserInputForHardMode(sudoku, id);
-        }
-        var puzzleCompleted = checkIfPuzzleCompleted(sudoku);
-        if (puzzleCompleted) {
-            sudoku = finishPuzzleForHardMode(sudoku);
         }
         return sudoku;
     }
@@ -661,7 +656,11 @@ function addUserInputForHardModeAndNumber(sudoku, id, currentValue) {
 function removeUserInput(sudoku, id) {
     var spot = getSpotById(sudoku, id);
     var valueCompleted = checkIfValueCompleted(sudoku, spot.Value);
-    if (!spot.IsUsedAtBeginning && !valueCompleted && !spot.IsCompleted) {
+    if (!spot.IsUsedAtBeginning && !valueCompleted) {
+        if(spot.Value == spot.UserInput){
+            sudoku.NumberCompleted--;
+                                                                                                                                    console.log(sudoku.NumberCompleted);
+        }
         spot.UserInput = null;
         sudoku.Array[spot.Row][spot.Column] = spot;
         if (sudoku.ColorMode) {
@@ -688,7 +687,7 @@ function removeUserInput(sudoku, id) {
 function addUserInputForHardMode(sudoku, id) {
     var spot = getSpotById(sudoku, id);
     var completed = checkIfValueCompleted(sudoku, spot.Value);
-    if (!spot.IsUsedAtBeginning && sudoku.CurrentValue !== null && !completed) { //only react if spot isn't used at beginning and current value isn't null
+    if (!spot.IsUsedAtBeginning && sudoku.CurrentValue !== null && !completed && spot.UserInput == null) { //only react if spot isn't used at beginning and current value isn't null
         $("#" + id).html(""); //empty the spot of user notes/previous colors
         if (sudoku.ColorMode) {
             addUserInputForHardModeAndColor(sudoku, id, sudoku.CurrentValue);
@@ -702,10 +701,14 @@ function addUserInputForHardMode(sudoku, id) {
         spot.UserInput = sudoku.CurrentValue;
         if (spot.UserInput == spot.Value) {
             spot.IsCompleted = true;
+            sudoku.NumberCompleted++;
+            if(sudoku.NumberCompleted == 81){
+                finishPuzzleForHardMode(sudoku);
+            }
         }
         sudoku.Array[spot.Row][spot.Column] = spot;
 
-        var completed = checkIfValueCompleted(sudoku, sudoku.CurrentValue);
+        completed = checkIfValueCompleted(sudoku, sudoku.CurrentValue);
         if (completed) {
             if (sudoku.ColorMode) {
                 valueCompletedForColorMode(sudoku, id);
@@ -814,17 +817,6 @@ function showHint(sudoku, spotToShow) {
         $("#hint").html("//");
     }
 }
-//----RESET PUZZLE
-function resetPuzzle(sudoku) {
-    removeRoundedCornersAndUserInput();
-    makeValueBoxesNumbers();
-    sudoku = createSudoku();
-    sudoku = setUpSettings(sudoku);
-    sudoku = pickRandomStartingNumbers(sudoku, sudoku.NumberToShow);
-    sudoku = populateSpots(sudoku, hideLoadModal());
-    showAndHideUserInputForCreateNew();
-    return sudoku;
-}
 //DISPLAY FINISHED PUZZLE MODAL
 function displayFinishedPuzzleModal(sudoku) {
     $(".helpText").show();
@@ -836,6 +828,7 @@ function displayFinishedPuzzleModal(sudoku) {
         $("#finishedPuzzleText").html('Great job! You finished the puzzle!');
     }
 }
+//HIDE LOAD MODAL
 function hideLoadModal() {
     $("#loadModal").hide();
 }

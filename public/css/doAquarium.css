@@ -8,8 +8,8 @@
 }
 
 #wrapper{
-    margin: auto;
-    position: fixed;
+    /* margin: auto; */
+    /* position: fixed; */
     border: 2px solid;
     border-color: rgb(9, 35, 148);
     border-radius: 20px;

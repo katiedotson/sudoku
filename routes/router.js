@@ -22,10 +22,9 @@ router.get('/sudokuObject', (req, res) =>{
     res.json(sudoku);
 });
 
-
-router.post('/sudokuObject', (req,res) =>{
+router.post('/sudokuObject', (req,res) =>{ 
     if (!req.body) return res.sendStatus(400);
-    console.log(req.body);
+    console.log("From browser, Sudoku is: " + req.body);
 });
 
 router.get('/404', (req,res)=>{

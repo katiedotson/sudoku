@@ -29,6 +29,7 @@ function pickRandomStartingNumbers(sudoku, numberToAdd) {
         numberAdded++;
     }
     sudoku.NumberShown = sudoku.NumberShown + numberAdded;
+    sudoku.NumberCompleted = sudoku.NumberShown;
     return sudoku;
 }
 //REMOVE STARTING NUMBERS : remove numbers according to the number the user wants to remove 
@@ -43,10 +44,12 @@ function removeStartingNumbers(sudoku, numberToRemove) {
         }
         sudoku.Array[randomRow][randomColumn].IsUsedAtBeginning = false;
         sudoku.Array[randomRow][randomColumn].IsCompleted = false;
+        sudoku.Array[randomRow][randomColumn].UserInput = null;
 
         numberRemoved++;
     }
     sudoku.NumberShown = sudoku.NumberShown - numberRemoved;
+    sudoku.NumberCompleted = sudoku.NumberShown;
     return sudoku;
 }
 //DECIDE WHETHER TO ADD VALUE : based on mode and whether the spot is completed. includes ADD USER INPUT
@@ -134,25 +137,6 @@ function checkIfValueCompleted(sudoku, value) {
     }
     return completed;
 }
-//CHECK IF PUZZLE IS COMPLETE
-function checkIfPuzzleCompleted(sudoku) {
-    var spotsCompleted = 0;
-    var puzzleCompleted = false;
-
-    for (let row = 0; row < 9; row++) {
-        for (let column = 0; column < 9; column++) {
-            var userInput = sudoku.Array[row][column].UserInput;
-            var spotValue = sudoku.Array[row][column].Value;
-            if (userInput == spotValue) {
-                spotsCompleted++;
-            }
-        }
-    }
-    if (spotsCompleted == 81) {
-        puzzleCompleted = true;
-    }
-    return puzzleCompleted;
-}
 //GIVE A HINT
 function giveAHint(sudoku) {
     if (sudoku.Hints > 0) {
@@ -167,6 +151,10 @@ function giveAHint(sudoku) {
         sudoku.NumberShown++;
         sudoku.NumberToShow++;
         sudoku.Hints--;
+        sudoku.NumberCompleted++;
+        if(sudoku.NumberCompleted == 81){
+            return finishPuzzleForHardMode(sudoku);
+        }
 
         var spotToShow = sudoku.Array[randomRow][randomColumn];
         spotToShow.IsCompleted = true;
@@ -176,6 +164,9 @@ function giveAHint(sudoku) {
         sudoku.Array[spotToShow.Row][spotToShow.Column] = spotToShow;
 
         showHint(sudoku, spotToShow);
+    }
+    else{
+        shakePuzzle();
     }
     return sudoku;
 }

@@ -1,20 +1,25 @@
-$(document).ready(()=>{
+
+
+$(document).ready(function(){
     setSizes();
-    window.addEventListener('resize', setSizes, true);
+    //window.location.reload();
+    // window.addEventListener('resize', setSizes, true);
+});
+$( document ).ready(function() {
+    console.log( "ready!" );
 });
 
 function setSizes(){
-    var height = window.innerHeight;
-    var width = window.innerWidth;
-    $('#wrapper').css({
-        height :  height,
-        width : width
-    });
+    alert("called");
+    var windowHeight = window.innerHeight;
+    var windowWidth = window.innerWidth;
+    $('#wrapper').height(windowHeight);
+    $('#wrapper').width(windowWidth);
 }
 
 function registerUI(){
     $('#login').on('click', (event, ui)=>{
-
+        
     });
     $('#explore').on('click', (event, ui)=>{
 

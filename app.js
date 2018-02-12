@@ -6,8 +6,8 @@ const routes = require('./routes/router.js');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const fs = require('fs');
-
 var app = express();
+
 app.set('port', process.env.PORT || 5000);
 
 app.set('view engine', 'ejs');
