@@ -1,4 +1,3 @@
-//var Sudoku = createSudoku();
 module.exports = createSudoku;
 
 //Sudoku object init

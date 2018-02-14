@@ -2,15 +2,18 @@
 
 
 "use strict";
-$("#loadModal").show();
 $(document).ready(function(){
     startup();
 });
 
+function showLoadModal(){
+    $("#loadModal").show();
+}
+
 function startup(){
     console.log("startup called");
     var Sudoku;
-    var promise = $.getJSON('/sudokuObject');
+    var promise = $.getJSON('/sudokuObject', $("#loadModal").show());
     promise.done((data)=>{
         Sudoku = data;
         setSizes();
@@ -22,6 +25,7 @@ function startup(){
         Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
         Sudoku = populateSpots(Sudoku);
         registerUI(Sudoku);
+        hideLoadModal();
     });     
 }
 
