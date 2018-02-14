@@ -8,6 +8,7 @@ $(document).ready(function(){
 });
 
 function startup(){
+    console.log("startup called");
     var Sudoku;
     var promise = $.getJSON('/sudokuObject');
     promise.done((data)=>{

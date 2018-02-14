@@ -1,6 +1,5 @@
 /* jshint esversion: 6 */
 
-
 const express = require('express');
 const router = express.Router();
 var sudoku = require('../models/sudokus.js');
@@ -18,8 +17,10 @@ router.get('/sudoku', (req, res)=>{
     res.render('sudoku');
 });
 
-router.get('/sudokuObject', (req, res) =>{
-    res.json(sudoku);
+router.get('/sudokuObject', (req, res) =>{ 
+    var newSudoku = sudoku();
+    console.log(newSudoku);
+    res.json(newSudoku);
 });
 
 router.post('/sudokuObject', (req,res) =>{ 

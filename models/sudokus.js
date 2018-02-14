@@ -1,8 +1,9 @@
-var Sudoku = createSudoku();
-module.exports = Sudoku;
+//var Sudoku = createSudoku();
+module.exports = createSudoku;
 
 //Sudoku object init
 function getSudokuObject(){
+    console.log("get sudoku object");
     var SudokuObject = {
         "DidntWork": true, 
         "Array": [], 
@@ -269,9 +270,11 @@ function getId(row, column) {
 }
 
 function createSudoku() {
+    console.log("creating sudoku object");
     var newSudoku = createSudokuArray();
     while (newSudoku.DidntWork) {
         newSudoku = createSudokuArray();
     }
+    console.log(newSudoku.Array[0][0]);
     return newSudoku;
 }
