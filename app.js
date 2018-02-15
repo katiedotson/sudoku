@@ -27,6 +27,14 @@ var opts = { keepAlive : 1 };
 mongoose.connect(credentials.mongo.development.connectionString, opts);
 
 //AUTHORIZATION
+var auth = require('./lib/configurePassport.js')(app, {
+    baseURL : process.env.BASE_URL,
+    provider: credentials.authorizedProviders,
+    successRedirect : '/account',
+    failureRedirect: '/login'
+});
+auth.init();
+auth.registerRoutes();
 
 //COOKIES
 

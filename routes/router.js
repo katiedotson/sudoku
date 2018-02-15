@@ -25,7 +25,11 @@ router.get('/sudokuObject', (req, res) =>{
 
 router.post('/sudokuObject', (req,res) =>{ 
     if (!req.body) return res.sendStatus(400);
-    console.log("From browser, Sudoku is: " + req.body);
+    console.log(req.body);
+});
+
+router.get('/account', (req, res)=>{
+    res.render('account');
 });
 
 router.get('/404', (req,res)=>{
