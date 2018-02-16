@@ -19,12 +19,16 @@ app.use(express.static(__dirname + '/public'));
 //BODY PARSER
 app.use(bodyParser.json());
 
-//ROUTES
-app.use('/', routes);
-
 //MONGO
 var opts = { keepAlive : 1 };
 mongoose.connect(credentials.mongo.development.connectionString, opts);
+
+//SESSION
+app.use(require('express-session')({
+    secret: credentials.cookieSecret,
+    resave: false,
+    saveUninitialized: true
+}));
 
 //AUTHORIZATION
 var auth = require('./lib/configurePassport.js')(app, {
@@ -36,7 +40,8 @@ var auth = require('./lib/configurePassport.js')(app, {
 auth.init();
 auth.registerRoutes();
 
-//COOKIES
+//ROUTES
+app.use('/', routes);
 
 //DISABLE
 //app.disable('x-powered-by');                                                        //don't tell browsers we're using node.js in response (res) headers
@@ -59,8 +64,6 @@ app.use((err, req, res, next) => {                                              
     res.status(500);
     res.render('500');
 });
-
-
 
 //LISTEN
 app.listen(app.get('port'), () => {                                                 //start the server

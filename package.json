@@ -9,6 +9,7 @@
   "author": "Katie Dotson",
   "license": "ISC",
   "dependencies": {
+    "cookie-parser": "^1.4.3",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
     "express-session": "^1.15.6",

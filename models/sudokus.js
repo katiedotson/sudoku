@@ -2,8 +2,8 @@ module.exports = createSudoku;
 
 //Sudoku object init
 function getSudokuObject(){
-    console.log("get sudoku object");
     var SudokuObject = {
+        "TimeCreated": getDate(),
         "DidntWork": true, 
         "Array": [], 
         "NumberToShow": 17, 
@@ -32,6 +32,11 @@ function getSudokuObject(){
             { "Value": 9, "Color": "#a54df2" }]
     };
     return SudokuObject;
+}
+
+function getDate(){
+    var date = Date.now();
+    return date;
 }
 
 //create Sudoku object; populate its Array with numbers randomly while ensuring no numbers repeat
@@ -269,11 +274,10 @@ function getId(row, column) {
 }
 
 function createSudoku() {
-    console.log("creating sudoku object");
     var newSudoku = createSudokuArray();
     while (newSudoku.DidntWork) {
         newSudoku = createSudokuArray();
     }
-    console.log(newSudoku.Array[0][0]);
+    console.log(newSudoku.TimeCreated);
     return newSudoku;
 }

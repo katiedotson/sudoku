@@ -37,6 +37,26 @@ function updateServer(sudoku) {
         data: sudokuToSend
     });
 }
+
+function savePuzzle(sudoku){
+    console.log(sudoku);
+    var sudokuToSend = JSON.stringify(sudoku);
+    var promise = $.ajax('/saveSudoku', {
+        contentType: 'application/json',
+        method: 'POST',
+        data: sudokuToSend
+    });
+    promise.done((data)=>{
+        console.log(data);
+        var res = data;
+        if(res.message == 'mustLogin'){
+            window.location.href='/login';
+        }
+        else{
+
+        }
+    });
+}
 //REGISTER UI 
 //                      ****EVENTS**** 
 function registerUI(sudoku) {
@@ -232,6 +252,10 @@ function registerUI(sudoku) {
         $("#puzzleFinishedModal").hide();
         $("#finishedPuzzleText").html("");
         $(".helpText").hide();
+    });
+    $("#savePuzzle").on("click", function(event, ui){
+        console.log(sudoku);
+        savePuzzle(sudoku);
     });
 }
 //UI FUNCTIONS //functions that change the interface                   */       

@@ -1,16 +1,12 @@
+/* jshint esversion: 6*/
 
-
-$(document).ready(function(){
-    setSizes();
-    //window.location.reload();
-    // window.addEventListener('resize', setSizes, true);
-});
 $( document ).ready(function() {
+    setSizes();
     console.log( "ready!" );
+    registerUI();
 });
 
 function setSizes(){
-    alert("called");
     var windowHeight = window.innerHeight;
     var windowWidth = window.innerWidth;
     $('#wrapper').height(windowHeight);
@@ -18,11 +14,7 @@ function setSizes(){
 }
 
 function registerUI(){
-    $('#login').on('click', (event, ui)=>{
-        
+    $('#google').on('click', (event, ui)=>{
+        window.location.href = 'auth/google';
     });
-    $('#explore').on('click', (event, ui)=>{
-
-    });
-
 }
