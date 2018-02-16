@@ -257,6 +257,9 @@ function registerUI(sudoku) {
         console.log(sudoku);
         savePuzzle(sudoku);
     });
+    $("#puzzleList").on("click", function(event, ui){
+        window.location.href = "puzzleList";
+    });
 }
 //UI FUNCTIONS //functions that change the interface                   */       
 //----SET SIZES: set puzzle size and spots according to window size

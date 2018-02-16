@@ -86,4 +86,31 @@ router.get('/500', (req,res)=>{
     res.render('500');
 });
 
+router.get('/puzzleList', (req,res)=>{
+    if(!req.session.user){
+        return res.redirect('/login');
+    }
+
+    res.render('puzzleList');
+
+    //res.send('puzzleList', )
+});
+
+router.get('/puzzleData', (req,res)=>{
+    console.log('get puzzle data');
+    console.log(req.session.user);
+    SudokuPuzzles.findOne({userId : req.session.user}, (err, sudokuPuzzles)=>{
+        if(err){
+            console.log(err);
+            return;
+        }
+        if(sudokuPuzzles){
+            res.json(sudokuPuzzles);
+        }
+        else{
+            res.render('puzzleList', {message: "noPuzzlesYet"});
+        }
+    });
+});
+
 module.exports = router;

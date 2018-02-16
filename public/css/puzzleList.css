@@ -1,0 +1,19 @@
+#doAquariumText{
+    color: rgb(255, 82, 2);
+    font-size: 3em;
+    margin-top: 30px;
+    font-family: 'Slabo 27px', serif;
+    text-align: right;
+    margin-right: 10px;
+}
+
+#menu{
+    font-family: 'Slabo 27px', serif;
+    font-size: 3em;
+    margin-left: 10px;
+}
+
+a{
+    text-decoration: none;
+}
+
