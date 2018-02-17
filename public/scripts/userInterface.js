@@ -15,15 +15,24 @@ function startup(){
     var Sudoku;
     var promise = $.getJSON('/sudokuObject', $("#loadModal").show());
     promise.done((data)=>{
+        console.log('promise done');
         Sudoku = data;
-        setSizes();
-        setMargins();
-        showAndHideUserInputForCreateNew();
-        removeRoundedCornersAndUserInput();
-        makeValueBoxesNumbers();
-        Sudoku = setUpSettings(Sudoku);
-        Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
-        Sudoku = populateSpots(Sudoku);
+        if(Sudoku.HasBeenSaved){
+            setSizes();
+            setMargins();
+            displayPuzzle(Sudoku);
+            console.log('Sudokuwas saved');
+        }
+        else{
+            setSizes();
+            setMargins();
+            showAndHideUserInputForCreateNew();
+            removeRoundedCornersAndUserInput();
+            makeValueBoxesNumbers();
+            Sudoku = setUpSettings(Sudoku);
+            Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
+            Sudoku = populateSpots(Sudoku);
+        }
         registerUI(Sudoku);
         hideLoadModal();
     });     
@@ -40,6 +49,7 @@ function updateServer(sudoku) {
 
 function savePuzzle(sudoku){
     console.log(sudoku);
+    sudoku.HasBeenSaved = true;
     var sudokuToSend = JSON.stringify(sudoku);
     var promise = $.ajax('/saveSudoku', {
         contentType: 'application/json',
@@ -270,11 +280,11 @@ function setSizes() {
     var puzzleWidth;
 
     if (windowWidth < 1000) {
-        puzzleWidth = windowWidth * .98;
+        puzzleWidth = windowWidth * 0.98;
         puzzleHeight = puzzleWidth;
     }
     else {
-        puzzleHeight = windowHeight * .6;
+        puzzleHeight = windowHeight * 0.6;
         puzzleWidth = puzzleHeight;
     }
 
@@ -350,7 +360,7 @@ function populateSpots(sudoku) {
             currentId++;
             $("#" + currentId).animate({ "backgroundColor": "white" }, { "duration": "fast" });
 
-            if (sudoku.Array[row][column].IsUsedAtBeginning) {
+            if (sudoku.Array[row][column].IsUsedAtBeginning || sudoku.Array[row][column].IsCompleted) {
                 $("#" + currentId).html(sudoku.Array[row][column].Value);
                 $(".spot").css({ "color": "black" });
                 sudoku.Array[row][column].IsCompleted = true;
@@ -368,7 +378,7 @@ function populateSpotsForColorMode(sudoku) {
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             currentId++;
-            if (sudoku.Array[row][column].IsUsedAtBeginning) {
+            if (sudoku.Array[row][column].IsUsedAtBeginning || sudoku.Array[row][column].IsCompleted) {
 
                 var value = sudoku.Array[row][column].Value;
                 var color = getColor(sudoku, value);
@@ -557,7 +567,13 @@ function showColorModeValueBoxes(sudoku) {
     for (let u = 1; u < 10; u++) {
         var color = getColor(sudoku, u);
         $("#value" + u).css({ "backgroundColor": color });
-        $("#value" + u).html("");
+        var completed = checkIfValueCompleted(sudoku, u);
+        if(completed){
+            $("#value" + u).html('<i class="material-icons">done</i>');
+        }
+        else{
+            $("#value" + u).html("");
+        }
     }
 }
 //----SHOW AND HIDE USER INPUT FOR LET'S GO
@@ -863,4 +879,19 @@ function displayFinishedPuzzleModal(sudoku) {
 //HIDE LOAD MODAL
 function hideLoadModal() {
     $("#loadModal").hide();
+}
+
+function displayPuzzle(sudoku){
+    sudoku.Playing = true;
+    if(sudoku.ColorMode){
+        populateSpotsForColorMode(sudoku);
+        showColorModeValueBoxes(sudoku);
+    }
+    else{
+        populateSpots(sudoku);
+    }
+    if (sudoku.HardMode) {
+        showHardModeInput();
+    }
+    showAndHideUserInputForLetsGo(sudoku);
 }

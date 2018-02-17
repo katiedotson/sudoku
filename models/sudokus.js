@@ -3,6 +3,7 @@ module.exports = createSudoku;
 //Sudoku object init
 function getSudokuObject(){
     var SudokuObject = {
+        "HasBeenSaved" : false,
         "TimeCreated": getDate(),
         "DidntWork": true, 
         "Array": [], 
@@ -35,7 +36,7 @@ function getSudokuObject(){
 }
 
 function getDate(){
-    var date = Date.now();
+    var date = new Date();
     return date;
 }
 
@@ -278,6 +279,5 @@ function createSudoku() {
     while (newSudoku.DidntWork) {
         newSudoku = createSudokuArray();
     }
-    console.log(newSudoku.TimeCreated);
     return newSudoku;
 }
