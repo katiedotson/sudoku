@@ -1,3 +1,7 @@
+body{
+    font-family: 'Slabo 27px', serif;
+}
+
 #doAquariumText{
     color: rgb(221, 76, 57);
     font-size: 3em;
@@ -33,6 +37,7 @@ a{
     height: 50px;
     background-color: rgb(117, 201, 157);
     margin: auto;
+    font-family: 'Slabo 27px', serif;
 }
 
 #actionModal{
@@ -45,4 +50,58 @@ a{
     text-align:  center;
     color: white;
     overflow: scroll;
+}
+
+#createNew{
+    background-color: transparent;
+    border-radius: 3px;
+    border: none;
+    width: 100%;
+    font-family: 'Slabo 27px', serif;
+    font-size: 2em;
+}
+
+#exitMenu{
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+}
+
+#actionOptions{
+    position: relative;
+    top: 50%;
+    font-size: 1.4em;
+    color: white;
+    text-align: center;
+}
+
+#loadPuzzle{
+    font-family: 'Slabo 27px', serif;
+    display: block;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+#deletePuzzle{
+    font-family: 'Slabo 27px', serif;
+    display: block;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+    border: none;
+}
+
+#closeActionModal{
+    font-family: 'Slabo 27px', serif;
+    display: block;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+    border: none;
 }

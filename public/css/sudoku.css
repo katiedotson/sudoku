@@ -1,6 +1,6 @@
 body{
     background-color: rgb(255, 255, 255);
-    font-family: 'Lato', sans-serif;
+    font-family: 'Slabo 27px', serif;
     text-decoration: none;
 } 
 .puzzle{
@@ -27,18 +27,20 @@ body{
     box-sizing: content-box;
 }
 button{
-    border: 1px solid;
+    border: none;
     border-radius: 5px;
     height: 20%;
     margin-top: 1%;
     margin-left: auto;
     margin-right: auto;
+    font-family: 'Slabo 27px', serif;
 }
 .valueBox{
     height: 2.5em;
     vertical-align: top;
     display: none;
     background: transparent;
+    border: 1px solid;
 }
 i{
     padding: none;
@@ -54,14 +56,14 @@ i{
 }  
 #play{
     border: none;
-    background-color: rgb(89, 209, 109);
+    background-color: rgb(117, 201, 157);
     display: block;
     margin-top: 2em;
     height: 4em;
     width: 100%;
 }
 #createNew{
-    background-color: rgb(89, 209, 109);
+    background-color: rgb(117, 201, 157);
     border-radius: 3px;
     border: none;
     display: none;
@@ -69,7 +71,7 @@ i{
     height: 50%;
 }
 #createNotes{
-    background-color: rgb(89, 117, 209);
+    background-color: rgb(75, 132, 236);
     border-radius: 3px;
     border: none;
     display: none;
@@ -85,7 +87,7 @@ i{
     height: 50%;
 }
 #hint{
-    background-color: rgb(224, 79, 26);
+    background-color: rgb(221,76,57);
     border-radius: 3px;
     border: none;
     display: none;
@@ -93,7 +95,7 @@ i{
     height: 50%;
 }
 #oops{
-    background-color: rgb(226, 244, 66);
+    background-color: rgb(242, 207, 84);
     border-radius: 3px;
     border: none;
     display: none;
@@ -111,7 +113,7 @@ i{
 }
 
 #help{
-    background-color: rgb(79, 176, 245);
+    background-color: rgb(75, 132, 236);
     border-radius: 3px;
     border: none;
     display: none;
@@ -201,4 +203,51 @@ i{
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+#savePuzzle{
+    display: block;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+}
+
+#puzzleList{
+    display: block;
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+}
+
+#exitMenu{
+    height: 30px;
+    background-color: transparent;
+    color: white;
+    padding: 5px;
+}
+
+#menuOptions{
+    position: relative;
+    top: 50%;
+    font-size: 1.4em;
+    color: white;
+}
+
+#menu{
+    display: none;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 1, 26, 0.657);
+    z-index: 1;
+    position: absolute;
+    text-align:  center;
+    color: white;
+    overflow: scroll;
+}
+
+#menuIcon{
+    position: relative;
+    
 }

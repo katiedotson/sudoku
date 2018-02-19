@@ -4,7 +4,7 @@
 $(document).ready(function(){
     setSizes();
     //window.addEventListener('resize', setSizes, true);
-    //registerUI();
+    registerUI();
 });
 
 function setSizes(){
@@ -16,12 +16,14 @@ function setSizes(){
 }
 
 function registerUI(){
-    $('#login').on('click', (event, ui)=>{
-        window.location.href = '/login';
+    $('#play').on('click', (event, ui)=>{
+        window.location.href = '/sudoku';
     });
-    $('#explore').on('click', (event, ui)=>{
+    $('#puzzleList').on('click', (event, ui)=>{
+        window.location.href = '/puzzleList';
+    });
+    $('#deleteAccount').on('click', (event, ui)=>{
 
     });
 
 }
-

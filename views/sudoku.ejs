@@ -13,7 +13,7 @@
     <script src="/scripts/puzzleMods.js"></script>
     <script src="/scripts/userInterface.js"></script>
     <link rel="stylesheet" href="/css/sudoku.css">
-    <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Slabo+27px" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <title>Sudoku</title>
 </head>
@@ -24,11 +24,21 @@
 <div id = "puzzleFinishedModal">
         <div id = "finishedPuzzleText" class="helpText"></div>
         <button id="exitFinishedModal">
-            <i class="material-icons">check_circle</i>
+            <i class="material-icons">close</i>
         </button>
 </div>
-<div id="savePuzzle">Save puzzle</div>
-<div id="puzzleList">Puzzle list</div>
+<div id="menuIcon">
+        <i class="material-icons">menu</i>
+</div>
+<div id="menu">
+    <div id="menuOptions">
+            <button id="savePuzzle">savePuzzle</button>
+            <button id="puzzleList">puzzleList</button>
+            <button id="exitMenu">
+                <i class="material-icons">close</i>
+            </button>
+    </div>
+</div>
 <div id="helpModal" class="helpfulness">
     <div id="hardModeColorMode" class="helpText">
         1. click the colored button at the bottom of the screen and then click a spot in the puzzle to add it. when you do,

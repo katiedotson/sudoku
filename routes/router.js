@@ -102,6 +102,9 @@ router.post('/saveSudoku', (req, res) =>{
 
 //delete  this ?
 router.get('/account', (req, res)=>{
+    if(!req.session.user){
+        return res.redirect('login');
+    }
     res.render('account');
 });
 

@@ -1,0 +1,30 @@
+#options{
+    color: rgb(69,123,222);
+    font-size: 1.4em;
+    font-family: 'Slabo 27px', serif;
+    margin-right: 10px;
+    margin: auto;
+    margin-top: 30%;
+    vertical-align: middle;
+}
+
+#doAquariumText{
+    color: rgb(255, 82, 2);
+    font-size: 3em;
+    font-family: 'Slabo 27px', serif;
+    text-align: right;
+    margin-right: 10px;
+}
+
+#wrapper{
+    /* margin: auto; */
+    /* position: fixed; */
+    border: 2px solid;
+    border-color: rgb(30,77,123);
+    border-radius: 20px;
+    background-color: white;
+}
+div{
+    text-align: center;
+    line-height: 2em;
+}

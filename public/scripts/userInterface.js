@@ -13,7 +13,7 @@ function showLoadModal(){
 function startup(){
     console.log("startup called");
     var Sudoku;
-    var promise = $.getJSON('/sudokuObject', $("#loadModal").show());
+    var promise = $.getJSON('/sudokuObject', showLoadModal(), $("spotsToShow").slider("disable"));
     promise.done((data)=>{
         console.log('promise done');
         Sudoku = data;
@@ -21,9 +21,10 @@ function startup(){
             setSizes();
             setMargins();
             displayPuzzle(Sudoku);
-            console.log('Sudokuwas saved');
+            console.log('Sudoku was saved');
         }
         else{
+            $("spotsToShow").slider("enable");
             setSizes();
             setMargins();
             showAndHideUserInputForCreateNew();
@@ -269,6 +270,15 @@ function registerUI(sudoku) {
     });
     $("#puzzleList").on("click", function(event, ui){
         window.location.href = "puzzleList";
+    });
+    $("#menuIcon").on("click", function(event,ui){
+        $("#spotsToShow").slider("disable");
+        $("#menu").show();
+    });
+    $("#exitMenu").on("click", function(event,ui){
+
+        $("#menu").hide();
+        $("#spotsToShow").slider("enable");
     });
 }
 //UI FUNCTIONS //functions that change the interface                   */       

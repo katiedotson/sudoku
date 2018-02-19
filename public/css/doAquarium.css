@@ -1,5 +1,5 @@
 #doAquariumText{
-    color: rgb(255, 82, 2);
+    color: rgb(221,76,57);
     font-size: 3em;
     margin-top: 30%;
     font-family: 'Slabo 27px', serif;
@@ -27,20 +27,20 @@ a{
 }
 #explore{
     display: inline;
-    color: rgb(9, 35, 148);
+    color: rgb(69,123,222);
     margin: auto;
 }
 
 #login{
     display: inline-block;
-    color: rgb(148, 9, 51);
+    color: rgb(117,201,157);
     margin: auto;
 }
 
 #login:hover{
-    color: aqua;
+    color: rgb(30,77,123);
 }
 
 #explore:hover{
-    color: rgb(110, 39, 204);
+    color: rgb(30,77,123);
 }
