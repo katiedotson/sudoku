@@ -1,0 +1,10 @@
+{"web":{"client_id":"954324694032-agcmcv5vletoritk9eppr5ssbt74dg0u.apps.googleusercontent.com",
+    "project_id":"meadowlarktest",
+    "auth_uri":"https://accounts.google.com/o/oauth2/auth",
+    "token_uri":"https://accounts.google.com/o/oauth2/token",
+    "auth_provider_x509_cert_url":"https://www.googleapis.com/oauth2/v1/certs",
+    "client_secret":"bZ9kPZLpyVHYEsUpYqVf17oB",
+    "redirect_uris":["http://localhost:5000/whatever"],
+    "javascript_origins":["http://localhost:5000"]
+    }
+}
