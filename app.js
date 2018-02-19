@@ -1,7 +1,7 @@
 /* jshint esversion: 6*/
 
 const express = require('express');
-const credentials = require('config/credentials.js');
+const credentials = require('./config/credentials.js');
 const routes = require('./routes/router.js');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
