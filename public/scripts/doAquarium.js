@@ -4,7 +4,7 @@
 $(document).ready(function(){
     setSizes();
     //window.addEventListener('resize', setSizes, true);
-    //registerUI();
+    registerUI();
 });
 
 function setSizes(){
