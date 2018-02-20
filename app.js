@@ -6,6 +6,7 @@ const routes = require('./routes/router.js');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+var url = require('url');
 var app = express();
 
 app.set('port', process.env.PORT || 5000);
@@ -33,7 +34,7 @@ app.use(require('express-session')({
 //AUTHORIZATION
 var auth = require('./lib/configurePassport.js')(app, {
     baseURL : process.env.BASE_URL,
-    provider: credentials.authorizedProviders,
+    providers: credentials.authorizedProviders,
     successRedirect : '/account',
     failureRedirect: '/login'
 });
@@ -68,6 +69,6 @@ app.use((err, req, res, next) => {                                              
 //LISTEN
 app.listen(app.get('port'), () => {                                                 //start the server
     console.log('Server started on port ' + app.get('port'));
-    console.log(process.env.baseURL);
+    console.log(process.env.NODE_ENV);
 });
 
