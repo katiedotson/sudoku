@@ -63,7 +63,7 @@ function decideWhetherToShowValueInSpot(sudoku, id) {
 //ADD USER INPUT TO SUDOKU ARRAY : adds value to spot, says it is completed 
 function addUserInputToSudokuArray(sudoku, id) {
     var spot = getSpotById(sudoku, id);
-    spot.IsUsedAtBeginning = true;
+    // spot.IsUsedAtBeginning = true;
     spot.UserInput = sudoku.CurrentValue;
     spot.IsCompleted = true;
 

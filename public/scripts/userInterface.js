@@ -12,13 +12,14 @@ function showLoadModal(){
 
 function startup(){
     console.log("startup called");
-    var Sudoku;
+    showLoadModal(); 
+    $("spotsToShow").slider("disable");
     // window.location.href = '/sudoku';
-    var promise = $.getJSON('/sudokuObject', showLoadModal(), $("spotsToShow").slider("disable"));
-    promise.done((data)=>{
+    var promise = $.getJSON('/sudokuObject', function(data){
         console.log('promise done');
-        var Sudoku = new SudokuConstructor(data);
+        var Sudoku = data;
         if(Sudoku.HasBeenSaved){
+            console.log(Sudoku);
             Sudoku.CurrentValue = null;
             Sudoku.IdOfCurrentValue = "0";
             setSizes();
@@ -26,9 +27,11 @@ function startup(){
             Sudoku = displayPuzzle(Sudoku);
             console.log('Sudoku was saved');
             console.log(Sudoku.NumberCompleted);
+            Sudoku = registerUI(Sudoku);
             $("spotsToShow").slider("enable");
         }
         else{
+            console.log(Sudoku);
             $("spotsToShow").slider("enable");
             setSizes();
             setMargins();
@@ -37,8 +40,8 @@ function startup(){
             Sudoku = setUpSettings(Sudoku);
             Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
             Sudoku = populateSpotsForNumberMode(Sudoku);
+            Sudoku = registerUI(Sudoku);
         }
-        registerUI(Sudoku);
         hideLoadModal();
     });     
 }
@@ -114,8 +117,7 @@ function registerUI(sudoku) {
     });
     //CREATE NEW 
     $("#createNew").on("click", function (event, ui) {
-        $("#loadModal").show();
-        startup();
+        window.location.href = '/sudoku';
     });
     //PUZZLE DIV
     $(".puzzle div").on("click", function (event, ui) {
@@ -283,6 +285,8 @@ function registerUI(sudoku) {
         $("#spotsToShow").slider("enable");
     });
 }
+
+
 //UI FUNCTIONS //functions that change the interface                   */       
 //----SET SIZES: set puzzle size and spots according to window size
 function setSizes() {
@@ -366,11 +370,14 @@ function setUpSettings(sudoku) {
 }
 //----POPULATE SPOTS: show values for the puzzle
 function populateSpotsForNumberMode(sudoku) {
+    console.log('NUMBER MODE CALLED');
+    console.log(sudoku);
+    $('.spot').animate({ "backgroundColor": "white" }, { "duration": "fast" });
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             currentId++;
-            $("#" + currentId).animate({ "backgroundColor": "white" }, { "duration": "fast" });
+            // $("#" + currentId).animate({ "backgroundColor": "white" }, { "duration": "fast" });
             var thisSpot = sudoku.Array[row][column];
             if(thisSpot.IsUsedAtBeginning){                                          //spots that were used at beginning (without added user input)
                 // console.log('1 spot');
@@ -411,17 +418,19 @@ function populateSpotsForNumberMode(sudoku) {
 }
 //----POPULATE SPOTS FOR COLOR MODE
 function populateSpotsForColorMode(sudoku) {
-    console.log('populate spots for color mode called');
+    console.log('COLOR MODE CALLED');
+    console.log(sudoku);
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             currentId++;
             var thisSpot = sudoku.Array[row][column];
             if(thisSpot.IsUsedAtBeginning){     //spots used without user input
+                console.log("this spot is used at beginning");
                 var value = sudoku.Array[row][column].Value;
                 var color = getColor(sudoku, value);
                 $("#" + currentId).html("");
-                $("#" + currentId).animate({ "backgroundColor": color }, { "duration": "slow" });
+                $("#" + currentId).css({ "background-color": color, "transition": "background-color 500ms" });
             }
             else if(thisSpot.UserInput != null){                                                                        //spots with added user input or hinted
                 if(thisSpot.WasHinted){                                                                                     //spots that were hinted
@@ -578,11 +587,11 @@ function removeRoundedCorners() {
             $("#" + id).css({ "border-radius": "" });
         }
     }
-    id = 0;
-    for (let r = 0; r < 10; r++) {
-        id++;
-        $("#value" + id).css({ "border-radius": "" });
-    }
+    // id = 0;
+    // // for (let r = 0; r < 10; r++) {
+    // //     id++;
+    // //     $("#value" + id).css({ "border-radius": "" });
+    // // }
 }
 //----SHAKE PUZZLE
 function shakePuzzle() {
@@ -782,6 +791,7 @@ function removeUserInput(sudoku, id) {
             sudoku.NumberCompleted--;
         }
         spot.UserInput = null;
+        spot.IsCompleted = false;
         sudoku.Array[spot.Row][spot.Column] = spot;
         if (sudoku.ColorMode) {
             $("#" + id).css({ "background-color": "white", "transition": "background-color 500ms" })
