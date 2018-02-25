@@ -7,8 +7,8 @@ module.exports = {
                 appSecret: 'bZ9kPZLpyVHYEsUpYqVf17oB'
             },
             production:{
-                appId : '954324694032-26vjeh7a7fqu2mma62vq92ormgcc6evd.apps.googleusercontent.com',
-                appSecret: 'EqL2AqB8jAcKe_P9Q2q8Mhnx'
+                appId : '954324694032-agcmcv5vletoritk9eppr5ssbt74dg0u.apps.googleusercontent.com',
+                appSecret: 'bZ9kPZLpyVHYEsUpYqVf17oB'
             }
         }
 
