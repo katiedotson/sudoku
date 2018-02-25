@@ -13,15 +13,20 @@ function showLoadModal(){
 function startup(){
     console.log("startup called");
     var Sudoku;
+    // window.location.href = '/sudoku';
     var promise = $.getJSON('/sudokuObject', showLoadModal(), $("spotsToShow").slider("disable"));
     promise.done((data)=>{
         console.log('promise done');
-        Sudoku = data;
+        var Sudoku = new SudokuConstructor(data);
         if(Sudoku.HasBeenSaved){
+            Sudoku.CurrentValue = null;
+            Sudoku.IdOfCurrentValue = "0";
             setSizes();
             setMargins();
-            displayPuzzle(Sudoku);
+            Sudoku = displayPuzzle(Sudoku);
             console.log('Sudoku was saved');
+            console.log(Sudoku.NumberCompleted);
+            $("spotsToShow").slider("enable");
         }
         else{
             $("spotsToShow").slider("enable");
@@ -29,10 +34,9 @@ function startup(){
             setMargins();
             showAndHideUserInputForCreateNew();
             removeRoundedCornersAndUserInput();
-            makeValueBoxesNumbers();
             Sudoku = setUpSettings(Sudoku);
             Sudoku = pickRandomStartingNumbers(Sudoku, Sudoku.NumberToShow);
-            Sudoku = populateSpots(Sudoku);
+            Sudoku = populateSpotsForNumberMode(Sudoku);
         }
         registerUI(Sudoku);
         hideLoadModal();
@@ -73,39 +77,37 @@ function savePuzzle(sudoku){
 function registerUI(sudoku) {
     //SPOTS TO SHOW SLIDER
     $("#spotsToShow").on("slidestop", function (event, ui) {
+        console.log('spots to show value is ' + $('#spotsToShow').val());
         sudoku.NumberToShow = $("#spotsToShow").val();
         if (sudoku.NumberShown < sudoku.NumberToShow) {
+            console.log('numbers added');
             var numberToAdd = sudoku.NumberToShow - sudoku.NumberShown;
             sudoku = pickRandomStartingNumbers(sudoku, numberToAdd);
             if (sudoku.ColorMode) {
                 sudoku = populateSpotsForColorMode(sudoku);
             }
             else {
-                sudoku = populateSpots(sudoku);
+                sudoku = populateSpotsForNumberMode(sudoku);
             }
         }
-        else if (sudoku.NumberShown > sudoku.NumberToShow) {
+        else if(sudoku.NumberShown > sudoku.NumberToShow){
+            console.log('numbers removed');
             var numberToRemove = sudoku.NumberShown - sudoku.NumberToShow;
             sudoku = removeStartingNumbers(sudoku, numberToRemove);
-            if (sudoku.ColorMode) {
+            if(sudoku.ColorMode){
                 sudoku = populateSpotsForColorMode(sudoku);
             }
-            else {
-                sudoku = populateSpots(sudoku);
+            else{
+                sudoku = populateSpotsForNumberMode(sudoku);
             }
         }
+        console.log(sudoku.NumberShown);
         updateServer(sudoku);
         return sudoku;
     });
     //LETS GO 
     $("#play").on("click", function (event, ui) {
         sudoku.Playing = true;
-        if (sudoku.ColorMode) {
-            showColorModeValueBoxes(sudoku);
-        }
-        if (sudoku.HardMode) {
-            showHardModeInput();
-        }
         showAndHideUserInputForLetsGo(sudoku);
         updateServer(sudoku);
         return sudoku;
@@ -209,7 +211,7 @@ function registerUI(sudoku) {
     $("#colorMode").on("change", function (event, ui) {
         if (sudoku.ColorMode) {
             sudoku.ColorMode = false;
-            sudoku = populateSpots(sudoku);
+            sudoku = populateSpotsForNumberMode(sudoku);
         }
         else {
             sudoku.ColorMode = true;
@@ -363,20 +365,45 @@ function setUpSettings(sudoku) {
     return sudoku;
 }
 //----POPULATE SPOTS: show values for the puzzle
-function populateSpots(sudoku) {
+function populateSpotsForNumberMode(sudoku) {
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             currentId++;
             $("#" + currentId).animate({ "backgroundColor": "white" }, { "duration": "fast" });
-
-            if (sudoku.Array[row][column].IsUsedAtBeginning || sudoku.Array[row][column].IsCompleted) {
-                $("#" + currentId).html(sudoku.Array[row][column].Value);
-                $(".spot").css({ "color": "black" });
-                sudoku.Array[row][column].IsCompleted = true;
+            var thisSpot = sudoku.Array[row][column];
+            if(thisSpot.IsUsedAtBeginning){                                          //spots that were used at beginning (without added user input)
+                // console.log('1 spot');
+                $("#" + currentId).html(thisSpot.Value);
+                $("#" + currentId).css({ "color": "black" });
             }
-            else {
-                $("#" + currentId).html("");
+            else if(thisSpot.UserInput != null){                                            //hinted spots or spots with user input
+                // console.log('not used at beginning');
+                if(thisSpot.WasHinted){                                                         //hinted spots
+                    $("#"+currentId).html(thisSpot.Value);
+                    $("#"+currentId).css({"color":"green"});
+                }
+                else{                                                                           //spots with user input
+                    $("#"+currentId).html(thisSpot.UserInput);
+                    if(sudoku.HardMode){
+                        $("#"+currentId).css("color", "red");
+                    }
+                    else{
+                        $("#"+currentId).css("color", "black");
+                    }
+                }
+            }
+            else{                                                                           //no user input, hints, or starting values                                                
+                if(thisSpot.UserNotes.length > 0){                                               //check if there are notes
+                    for(let i = 0; i < thisSpot.UserNotes.length; i++){
+                        showNotes(sudoku,i, thisSpot);
+                    }
+                }
+                else{                                                                          //otherwise, there isn't anything there
+                // console.log('empty spot');    
+                    $("#" + currentId).html("");
+                    $("#" + currentId).css({ "color": "black" });
+                }
             }
         }
     }
@@ -384,22 +411,40 @@ function populateSpots(sudoku) {
 }
 //----POPULATE SPOTS FOR COLOR MODE
 function populateSpotsForColorMode(sudoku) {
+    console.log('populate spots for color mode called');
     var currentId = 0;
     for (let row = 0; row < 9; row++) {
         for (let column = 0; column < 9; column++) {
             currentId++;
-            if (sudoku.Array[row][column].IsUsedAtBeginning || sudoku.Array[row][column].IsCompleted) {
-
+            var thisSpot = sudoku.Array[row][column];
+            if(thisSpot.IsUsedAtBeginning){     //spots used without user input
                 var value = sudoku.Array[row][column].Value;
                 var color = getColor(sudoku, value);
                 $("#" + currentId).html("");
                 $("#" + currentId).animate({ "backgroundColor": color }, { "duration": "slow" });
-
-                sudoku.Array[row][column].IsCompleted = true;
             }
-            else {
-                $("#" + currentId).html("");
-                $("#" + currentId).animate({ "backgroundColor": "white" }, { "duration": "slow" });
+            else if(thisSpot.UserInput != null){                                                                        //spots with added user input or hinted
+                if(thisSpot.WasHinted){                                                                                     //spots that were hinted
+                    var color = getColor(sudoku, thisSpot.Value);
+                    $("#" + currentId).css({ "background-color": color, "transition": "background-color 500ms" });
+                    $("#" + currentId).html('<i class="material-icons">stars</i>');
+                }
+                else{                                                                                                       //spots with user-added input
+                    var color = getColor(sudoku, thisSpot.UserInput);
+                    $("#" + currentId).css({ "background-color": color, "transition": "background-color 500ms" });
+                    $("#" + currentId).html('<i class="material-icons">grain</i>');
+                }
+            }
+            else{                                                                                                           //no user input, hints, or starting values 
+                if(thisSpot.UserNotes.length > 0){                                                                              //check if there are notes
+                    for(let i = 0; i < thisSpot.UserNotes.length; i++){
+                        showNotes(sudoku,i, thisSpot);
+                    }        //show user notes
+                }
+                else{                                                                                                       //if there isn't anything there
+                    $("#" + currentId).css({ "background-color": "white", "transition": "background-color 500ms" });
+                    $("#"+ currentId).html("");
+                }                                   
             }
         }
     }
@@ -425,7 +470,7 @@ function highlightInPuzzle(sudoku) {
             }
             else {
                 if ((spot.Value == sudoku.CurrentValue && spot.IsUsedAtBeginning) || spot.UserInput == sudoku.CurrentValue) {
-                    console.log(spot);
+                    // console.log(spot);
                     var idOfCurrentValue = spot.Id;
                     if (sudoku.ColorMode) {
                         $("#" + idOfCurrentValue).css({ "border-radius": "50px", "transition": "border-radius 500ms" });
@@ -547,9 +592,15 @@ function shakePuzzle() {
     div.animate({ left: '-=40px' }, { duration: 100, easing: "swing" });
 }
 //----MAKE VALUE BOXES NUMBERS
-function makeValueBoxesNumbers() {
-    for (let i = 1; i < 10; i++) {
-        $("#value" + i).css({ "background-color": "transparent" });
+function makeValueBoxesNumbers(sudoku) {
+    for (let i = 0; i < 9; i++) {
+        var isValueCompleted = checkIfValueCompleted(sudoku, i);
+        if(isValueCompleted){
+            $("#value" + i).css({ "background-color": sudoku.CompletedColor});
+        }
+        else{
+            $("#value" + i).css({ "background-color": "transparent" });
+        }
         $("#value" + i).html(i);
     }
 }
@@ -590,8 +641,26 @@ function showColorModeValueBoxes(sudoku) {
 function showAndHideUserInputForLetsGo(sudoku) {
     $("#settings").hide();
     $(".valueBox").fadeIn();
+    if(sudoku.ColorMode){
+        showColorModeValueBoxes(sudoku);
+    }
+    else{
+        makeValueBoxesNumbers(sudoku);
+    }
     if (sudoku.HardMode) {
         $("#controls").fadeIn("slow");
+        $("#createNotes").show();
+        $("#oops").show();
+        $("#hint").show();
+        if(sudoku.Hints == 2){
+            $("#hint").html("hint??");
+        }
+        else if(sudoku.Hints == 1){
+            $("#hint").html("hint?");
+        }
+        else if(sudoku.Hints == 0){
+            $("#hint").html("//");
+        }
     }
     else {
         $("#controls").fadeIn("slow");
@@ -608,12 +677,6 @@ function showAndHideUserInputForCreateNew() {
     $("#controls").hide();
     $(".valueBox").hide();
     $("#settings").fadeIn("slow");
-}
-//----SHOW HARD MODE INPUT
-function showHardModeInput() {
-    $("#createNotes").show();
-    $("#oops").show();
-    $("#hint").show();
 }
 //----EASY MODE ACTION FOR VALUE BOX
 function easyModeActionForValueBox(sudoku, idOfSelectedValue) {
@@ -717,7 +780,6 @@ function removeUserInput(sudoku, id) {
     if (!spot.IsUsedAtBeginning && !valueCompleted) {
         if(spot.Value == spot.UserInput){
             sudoku.NumberCompleted--;
-                                                                                                                                    console.log(sudoku.NumberCompleted);
         }
         spot.UserInput = null;
         sudoku.Array[spot.Row][spot.Column] = spot;
@@ -736,7 +798,7 @@ function removeUserInput(sudoku, id) {
     }
     if (spot.UserNotes.length > 0 && spot.Value != spot.UserInput) {
         for (let i = 0; i < spot.UserNotes.length; i++) {
-            addUserNoteToSpotAfterOops(sudoku, i, spot);
+            showNotes(sudoku, i, spot);
         }
     }
     return sudoku;
@@ -744,17 +806,14 @@ function removeUserInput(sudoku, id) {
 //----ADD USER INPUT FOR HARD MODE
 function addUserInputForHardMode(sudoku, id) {
     var spot = getSpotById(sudoku, id);
-    var completed = checkIfValueCompleted(sudoku, spot.Value);
-    if (!spot.IsUsedAtBeginning && sudoku.CurrentValue !== null && !completed && spot.UserInput == null) { //only react if spot isn't used at beginning and current value isn't null
+    var isValueCompleted = checkIfValueCompleted(sudoku, spot.Value);
+    if (!spot.IsUsedAtBeginning && sudoku.CurrentValue !== null && !isValueCompleted) { 
         $("#" + id).html(""); //empty the spot of user notes/previous colors
         if (sudoku.ColorMode) {
             addUserInputForHardModeAndColor(sudoku, id, sudoku.CurrentValue);
         }
         else {
             addUserInputForHardModeAndNumber(sudoku, id, sudoku.CurrentValue);
-        }
-        if (spot.UserNotes.length > 0) {
-
         }
         spot.UserInput = sudoku.CurrentValue;
         if (spot.UserInput == spot.Value) {
@@ -766,7 +825,7 @@ function addUserInputForHardMode(sudoku, id) {
         }
         sudoku.Array[spot.Row][spot.Column] = spot;
 
-        completed = checkIfValueCompleted(sudoku, sudoku.CurrentValue);
+        var completed = checkIfValueCompleted(sudoku, sudoku.CurrentValue);
         if (completed) {
             if (sudoku.ColorMode) {
                 valueCompletedForColorMode(sudoku, id);
@@ -780,30 +839,33 @@ function addUserInputForHardMode(sudoku, id) {
 }
 //----ADD USER NOTE TO SPOT
 function addUserNoteToSpot(sudoku, id, userValue) {
-    var spot = getSpotById(sudoku, id);
+    var spotClicked = getSpotById(sudoku, id);
+    console.log(spotClicked);
     var noteAlreadyAdded = false;
-    if (!spot.IsUsedAtBeginning && !spot.IsCompleted) {
+    if (!spotClicked.IsUsedAtBeginning && !spotClicked.IsCompleted) {
         for (let i = 0; i < 4; i++) {
-            if (spot.UserNotes[i] == userValue) {
+            if (spotClicked.UserNotes[i] == userValue) {
                 noteAlreadyAdded = true;
             }
         }
-        if (!noteAlreadyAdded && spot.UserNotes.length != 4) {
-            spot.UserNotes.push(userValue);
-            sudoku.Array[spot.Row][spot.Column] = spot;
+        console.log(noteAlreadyAdded);
+        if (!noteAlreadyAdded && spotClicked.UserNotes.length != 4) {
+            spotClicked.UserNotes.push(userValue);
+            console.log(spotClicked);
+            sudoku.Array[spotClicked.Row][spotClicked.Column] = spotClicked;
 
             var beginDiv = '<div class="userNote" ';
-            var idString = 'id = "' + spot.Id + 'userNoteFor' + userValue + '"';
+            var idString = 'id = "' + spotClicked.Id + 'userNoteFor' + userValue + '"';
             var endDiv = '></div>';
 
             if (sudoku.ColorMode) {
                 var color = getColor(sudoku, userValue);
-                $("#" + spot.Id).append(beginDiv + idString + endDiv);
-                $("#" + spot.Id + 'userNoteFor' + userValue).css({ "background-color": color, "transition": "background-color 500ms" });
+                $("#" + spotClicked.Id).append(beginDiv + idString + endDiv);
+                $("#" + spotClicked.Id + 'userNoteFor' + userValue).css({ "background-color": color, "transition": "background-color 500ms" });
             }
             else {
-                $("#" + spot.Id).append(beginDiv + idString + endDiv);
-                $("#" + spot.Id + 'userNoteFor' + userValue).html(userValue).css("color", "blue");
+                $("#" + spotClicked.Id).append(beginDiv + idString + endDiv);
+                $("#" + spotClicked.Id + 'userNoteFor' + userValue).html(userValue).css("color", "blue");
             }
             $(".userNote").show();
         }
@@ -817,7 +879,7 @@ function addUserNoteToSpot(sudoku, id, userValue) {
     return sudoku;
 }
 //----ADD USER NOTE TO SPOT AFTER OOPS
-function addUserNoteToSpotAfterOops(sudoku, i, spot) {
+function showNotes(sudoku, i, spot) {
     var userValue = spot.UserNotes[i];
 
     var beginDiv = '<div class="userNote" ';
@@ -864,7 +926,6 @@ function showHint(sudoku, spotToShow) {
             $("#" + spotToShow.Id).animate({ "backgroundColor": sudoku.HighlightColor }, { "duration": "slow" });
         }
     }
-
     if (sudoku.Hints == 2) {
         $("#hint").html("hint??");
     }
@@ -890,18 +951,15 @@ function displayFinishedPuzzleModal(sudoku) {
 function hideLoadModal() {
     $("#loadModal").hide();
 }
-
+//DISPLAY PUZZLE
 function displayPuzzle(sudoku){
     sudoku.Playing = true;
     if(sudoku.ColorMode){
-        populateSpotsForColorMode(sudoku);
-        showColorModeValueBoxes(sudoku);
+        sudoku = populateSpotsForColorMode(sudoku);
     }
     else{
-        populateSpots(sudoku);
-    }
-    if (sudoku.HardMode) {
-        showHardModeInput();
+        sudoku = populateSpotsForNumberMode(sudoku);
     }
     showAndHideUserInputForLetsGo(sudoku);
+    return sudoku;
 }

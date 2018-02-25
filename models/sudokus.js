@@ -9,6 +9,7 @@ function getSudokuObject(){
         "Array": [], 
         "NumberToShow": 17, 
         "NumberShown": 0, 
+        "NumberCompleted" : 0,
         "IncorrectInput": 0,
         "BoxesClicked": 0, 
         "HighlightColor": "#d3e4ff", 

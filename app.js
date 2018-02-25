@@ -69,6 +69,7 @@ app.use((err, req, res, next) => {                                              
 //LISTEN
 app.listen(app.get('port'), () => {                                                 //start the server
     console.log('Server started on port ' + app.get('port'));
-    console.log(process.env.NODE_ENV);
+    // console.log(process.env.NODE_ENV);
+    console.log(credentials.authorizedProviders.google[app.get('env')].appId);
 });
 

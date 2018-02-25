@@ -16,13 +16,12 @@ function pickRandomStartingNumbers(sudoku, numberToAdd) {
     while (numberAdded < numberToAdd) {
         var randomRow = getRandomInt(0, 8);
         var randomColumn = getRandomInt(0, 8);
-        while (sudoku.Array[randomRow][randomColumn].IsUsedAtBeginning) {
+        while (sudoku.Array[randomRow][randomColumn].UserInput != null) {
             randomRow = getRandomInt(0, 8);
             randomColumn = getRandomInt(0, 8);
         }
 
         sudoku.Array[randomRow][randomColumn].IsUsedAtBeginning = true;
-
         sudoku.Array[randomRow][randomColumn].UserInput = sudoku.Array[randomRow][randomColumn].Value;
         sudoku.Array[randomRow][randomColumn].IsCompleted = true;
 
@@ -52,7 +51,7 @@ function removeStartingNumbers(sudoku, numberToRemove) {
     sudoku.NumberCompleted = sudoku.NumberShown;
     return sudoku;
 }
-//DECIDE WHETHER TO ADD VALUE : based on mode and whether the spot is completed. includes ADD USER INPUT
+//DECIDE WHETHER TO ADD VALUE : based on mode and whether the spot is completed
 function decideWhetherToShowValueInSpot(sudoku, id) {
     var spot = getSpotById(sudoku, id);
     var decision = false;
@@ -79,10 +78,11 @@ function getSpotById(sudoku, id) {
         for (let column = 0; column < 9; column++) {
             if (sudoku.Array[row][column].Id == id) {
                 spot = sudoku.Array[row][column];
+                return spot;
             }
         }
     }
-    return spot;
+    
 }
 //SET CURRENT VALUE : set global variable currentValue based on the id of the div the user clicked
 function setCurrentValue(sudoku, idOfSelectedValue) {
@@ -143,7 +143,7 @@ function giveAHint(sudoku) {
         var randomRow = getRandomInt(0, 8);
         var randomColumn = getRandomInt(0, 8);
         var spot = sudoku.Array[randomRow][randomColumn];
-        while (spot.IsUsedAtBeginning || spot.UserInput == spot.Value) {
+        while (spot.UserInput == spot.Value) {
             randomRow = getRandomInt(0, 8);
             randomColumn = getRandomInt(0, 8);
             var spot = sudoku.Array[randomRow][randomColumn];
@@ -160,6 +160,7 @@ function giveAHint(sudoku) {
         spotToShow.IsCompleted = true;
         spotToShow.UserInput = spotToShow.Value;
         spotToShow.UserNotes = [];
+        spotToShow.WasHinted = true;
 
         sudoku.Array[spotToShow.Row][spotToShow.Column] = spotToShow;
 
@@ -175,4 +176,27 @@ function getRandomInt(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
     return Math.floor(Math.random() * (max - min)) + min;
+}
+
+function SudokuConstructor(data){
+    this.HasBeenSaved = data.HasBeenSaved;
+    this.TimeCreated = data.TimeCreated;
+    this.DidntWork = data.DidntWork;
+    this.Array = data.Array;
+    this.NumberToShow = data.NumberToShow;
+    this.NumberCompleted = data.NumberCompleted;
+    this.NumberShown = data.NumberShown;
+    this.IncorrectInput = data.IncorrectInput;
+    this.BoxesClicked = data.BoxesClicked;
+    this.HighlightColor = data.HighlightColor;
+    this.CompletedColor = data.CompletedColor;
+    this.NotesMode = data.NotesMode;
+    this.OopsMode = data.OopsMode;
+    this.IdOfCurrentValue = data.IdOfCurrentValue;
+    this.Playing = data.Playing;
+    this.ColorMode = data.ColorMode;
+    this.HardMode = data.HardMode;
+    this.CurrentValue = data.CurrentValue;
+    this.Hints = data.Hints;
+    this.ColorArray = data.ColorArray;
 }
