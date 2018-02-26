@@ -1,7 +1,7 @@
 /* jshint esversion: 6 */
 
-$(document).ready(function(){
-    document.addEventListener('puzzleChosen', function(e){
+$(document).ready(function () {
+    document.addEventListener('puzzleChosen', function (e) {
         puzzleAction(e.detail);
     });
     setSizes();
@@ -9,36 +9,48 @@ $(document).ready(function(){
     getPuzzles();
 });
 
-function getPuzzles(){
+function getPuzzles() {
     var promise = $.ajax({
         url: '/puzzleData',
         method: 'GET',
-        dataType: 'json', 
+        dataType: 'json',
     });
-    promise.done((data)=>{
+    promise.done((data) => {
         var sudokus = data;
         displaySudokus(sudokus);
     });
 }
 
-function displaySudokus(sudokus){
-    
-    for(let i = 0; i < sudokus.userPuzzles.length; i++){
+function displaySudokus(sudokus) {
+
+    for (let i = 0; i < sudokus.userPuzzles.length; i++) {
         var colorMode = sudokus.userPuzzles[i].ColorMode;
-        var mode;
-        if(colorMode){
-            mode = "Color Mode";
+        var hardMode = sudokus.userPuzzles[i].HardMode;
+        var numberOrColorMode;
+        var easyOrHardMode;
+        if (colorMode) {
+            numberOrColorMode = "Color";
         }
-        else{
-            mode = "Number Mode";
+        else {
+            numberOrColorMode = "Number";
         }
-        var percentCompleted = (100*(sudokus.userPuzzles[i].NumberCompleted/81)).toFixed(1)+ "% complete";
+        if (hardMode) {
+            easyOrHardMode = "Hard";
+        }
+        else {
+            easyOrHardMode = "Easy";
+        }
+        var percentCompleted = (100 * (sudokus.userPuzzles[i].NumberCompleted / 81)).toFixed(1) + "%";
         var id = "puzzle" + i;
-        $("#puzzleList").append('<div id=" ' + id + '" class="puzzle">' + mode + ', ' + percentCompleted + '</div>' );
+
+        var dateCreated = sudokus.userPuzzles[i].TimeCreated;
+        var formatDate = moment(dateCreated).format("MMM Do YY");
+
+        $("#puzzleList").append('<div id=" ' + id + '" class="puzzle">' + numberOrColorMode + ' / ' + easyOrHardMode + ' / ' + percentCompleted +  '/ ' + formatDate + '</div>');
     }
 }
 
-function setSizes(){
+function setSizes() {
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
 
@@ -58,53 +70,53 @@ function setSizes(){
 
 }
 
-function registerUI(){
+function registerUI() {
     var puzzleInt;
-    $("#puzzleList").on("click", ".puzzle", function(event, ui){
+    $("#puzzleList").on("click", ".puzzle", function (event, ui) {
         $('#actionModal').show();
         puzzleInt = (this.id.match(/\d+/).shift());
     });
-    $("#closeActionModal").on("click", function(event, ui){
+    $("#closeActionModal").on("click", function (event, ui) {
         $("#actionModal").hide();
     });
-    $("#loadPuzzle").on("click", function(event, ui){
-        var puzzleClicked = new CustomEvent('puzzleChosen', {'detail': {'puzzleInt': puzzleInt, 'action': 'loadPuzzle'}});
+    $("#loadPuzzle").on("click", function (event, ui) {
+        var puzzleClicked = new CustomEvent('puzzleChosen', { 'detail': { 'puzzleInt': puzzleInt, 'action': 'loadPuzzle' } });
         document.dispatchEvent(puzzleClicked);
     });
-    $("#deletePuzzle").on("click", function(event, ui){
-        var puzzleClicked = new CustomEvent('puzzleChosen', {'detail':{'puzzleInt': puzzleInt, 'action': 'deletePuzzle'}});
+    $("#deletePuzzle").on("click", function (event, ui) {
+        var puzzleClicked = new CustomEvent('puzzleChosen', { 'detail': { 'puzzleInt': puzzleInt, 'action': 'deletePuzzle' } });
         document.dispatchEvent(puzzleClicked);
     });
-    $("#createNew").on("click", function(event,ui){
+    $("#createNew").on("click", function (event, ui) {
         window.location.href = "/sudoku";
     });
 }
 
-function puzzleAction(puzzleClicked){
-    if(puzzleClicked.action == 'loadPuzzle'){       //load puzzle
+function puzzleAction(puzzleClicked) {
+    if (puzzleClicked.action == 'loadPuzzle') {       //load puzzle
         loadPuzzle(puzzleClicked.puzzleInt);
     }
-    else{                                           //delete puzzle
+    else {                                           //delete puzzle
         deletePuzzle(puzzleClicked.puzzleInt);
     }
 }
 
-function loadPuzzle(puzzleInt){
-    var puzzleInfo = {'puzzleInt': puzzleInt};
+function loadPuzzle(puzzleInt) {
+    var puzzleInfo = { 'puzzleInt': puzzleInt };
     var sendThis = JSON.stringify(puzzleInfo);
     console.log(sendThis);
     var promise = $.ajax({
         url: '/loadPuzzle',
         type: 'POST',
-        data: sendThis, 
+        data: sendThis,
         contentType: 'application/json'
     });
-    promise.done((data)=>{
+    promise.done((data) => {
         console.log('promise done');
         window.location.href = '/sudoku';
     });
 }
 
-function deletePuzzle(puzzleInt){
+function deletePuzzle(puzzleInt) {
     console.log("deleting puzzle " + puzzleInt);
 }

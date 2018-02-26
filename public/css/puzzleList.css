@@ -9,6 +9,7 @@ body{
     font-family: 'Slabo 27px', serif;
     text-align: right;
     margin-right: 10px;
+    background: linear-gradient(rgba(255, 255, 255, 0.973), rgba(255, 255, 255, 0));
 }
 
 a{

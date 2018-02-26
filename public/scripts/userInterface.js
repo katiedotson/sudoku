@@ -951,15 +951,12 @@ function showSavingPuzzleButton(){
 }
 
 function showPuzzleSaved(){
-    console.log('showing puzzle saved');
     $("#puzzleSaved").show();
     $("#savingPuzzle").hide();
     var puzzleSaved = setTimeout(hidePuzzleSaved, 4000);
-
 }
 
 function hidePuzzleSaved(){
     $("#puzzleSaved").hide();
     $("#savePuzzle").show();
-    $("#savingPuzzle").hide();
 }
