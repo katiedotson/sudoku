@@ -82,6 +82,7 @@ router.post('/saveSudoku', (req, res) =>{
                         return console.log(err);
                     }
                     console.log('The response from Mongo was ', raw);
+                    res.sendStatus(200);
                 });
             }
             else{
@@ -94,6 +95,7 @@ router.post('/saveSudoku', (req, res) =>{
                     if(err){
                         return console.log(err);
                     }
+                    res.sendStatus(200);
                 });
                 console.log("check yr database");
             }});

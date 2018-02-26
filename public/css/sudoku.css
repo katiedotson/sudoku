@@ -208,8 +208,27 @@ i{
 #savePuzzle{
     display: block;
     height: 30px;
-    background-color: transparent;
-    color: white;
+    width: 100%;
+    background-color: rgb(221,76,57);
+    color: black;
+    padding: 5px;
+}
+
+#savingPuzzle{
+    display: block;
+    height: 30px;
+    width: 100%;
+    background-color: rgb(219, 183, 66);
+    color: black;
+    padding: 5px;
+}
+
+#puzzleSaved{
+    display: block;
+    height: 30px;
+    width: 100%;
+    background-color: rgb(51, 189, 24);
+    color: black;
     padding: 5px;
 }
 
