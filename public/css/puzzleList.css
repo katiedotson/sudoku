@@ -15,7 +15,7 @@ body{
 a{
     text-decoration: none;
 }
-.puzzle{
+.puzzleItem{
     color: rgb(30, 77, 123);
     font-size: 1.4em;
     margin-top: 30px;
@@ -23,11 +23,10 @@ a{
     margin-right: 10px;
     border-bottom: 2px solid rgb(30, 77, 123);
 }
-.puzzle:hover{
+.puzzleItem:hover{
     color: rgb(69, 123, 222);
     border-bottom-color: rgb(221, 76, 57);
 }
-
 #puzzleList{
     overflow-y: scroll;
     margin: auto;
@@ -105,4 +104,31 @@ a{
     color: white;
     padding: 5px;
     border: none;
+}
+.loader {
+    border: 16px solid #f3f3f3; /* Light grey */
+    border-top: 16px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    animation: spin 2s linear infinite;
+    margin: auto;
+    top: 40%;
+    position: relative;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+#loadModal{
+    display: none;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(7, 1, 26, 0.657);
+    z-index: 1;
+    position: absolute;
+    text-align:  center;
+    color: white;
+    overflow: scroll;
 }

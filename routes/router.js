@@ -185,6 +185,27 @@ router.post('/loadPuzzle', (req,res)=>{
     res.send('200');
 });
 
+router.post('/deletePuzzle', (req, res) => {
+    var puzzleToDelete = req.body.puzzleInt;
+    SudokuPuzzles.findOne({ userId: req.session.user }, (err, sudokuPuzzles) => {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (sudokuPuzzles) {
+            sudokuPuzzles.userPuzzles.splice(puzzleToDelete, 1);
+
+            sudokuPuzzles.update(sudokuPuzzles, (err, raw) => {
+                if (err) {
+                    return console.log(err);
+                }
+                console.log('The response from Mongo was ', raw);
+            });
+            res.json(sudokuPuzzles);
+        }
+    });
+});
+
 router.get('/loadSudoku', (req,res)=>{
     console.log('get sudoku');
     console.log(req.session.puzzleInt);

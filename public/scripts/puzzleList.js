@@ -17,7 +17,8 @@ function getPuzzles() {
     });
     promise.done((data) => {
         var sudokus = data;
-        displaySudokus(sudokus);
+        $("#loadModal").show();
+        displaySudokus(sudokus, $("#loadModal").hide());
     });
 }
 
@@ -46,13 +47,36 @@ function displaySudokus(sudokus) {
         var dateCreated = sudokus.userPuzzles[i].TimeCreated;
         var formatDate = moment(dateCreated).format("MMM Do YY");
 
-        $("#puzzleList").append('<div id=" ' + id + '" class="puzzle">' + numberOrColorMode + ' / ' + easyOrHardMode + ' / ' + percentCompleted +  '/ ' + formatDate + '</div>');
+        $("#puzzleList").append('<div id=" ' + id + '" class="puzzleItem">' + numberOrColorMode + ' / ' + easyOrHardMode + ' / ' + percentCompleted +  '/ ' + formatDate + '</div>');
     }
 }
 
 function setSizes() {
     var windowWidth = $(window).width();
     var windowHeight = $(window).height();
+    
+    var puzzleHeight;
+    var puzzleWidth;
+
+    if (windowWidth < 1000) {
+        puzzleWidth = windowWidth * 0.98;
+        puzzleHeight = puzzleWidth;
+    }
+    else {
+        puzzleHeight = windowHeight * 0.6;
+        puzzleWidth = puzzleHeight;
+    }
+
+
+    var spotHeight = puzzleHeight / 9 - 1;
+    var spotWidth = spotHeight;
+
+
+    $(".puzzle").css("width", puzzleWidth);
+    $(".puzzle").css("height", puzzleHeight / 9);
+
+    $(".spot").css("width", spotWidth);
+    $(".spot").css("height", spotHeight);
 
     if (windowWidth < 1000) {
         listWidth = windowWidth * 0.98;
@@ -72,9 +96,11 @@ function setSizes() {
 
 function registerUI() {
     var puzzleInt;
-    $("#puzzleList").on("click", ".puzzle", function (event, ui) {
+    $("#puzzleList").on("click", ".puzzleItem", function (event, ui) {
         $('#actionModal').show();
         puzzleInt = (this.id.match(/\d+/).shift());
+        var puzzleClicked = new CustomEvent('puzzleChosen', {'detail': {'puzzleInt': puzzleInt, 'action': 'previewPuzzle'}});
+        document.dispatchEvent(puzzleClicked);
     });
     $("#closeActionModal").on("click", function (event, ui) {
         $("#actionModal").hide();
@@ -95,6 +121,9 @@ function registerUI() {
 function puzzleAction(puzzleClicked) {
     if (puzzleClicked.action == 'loadPuzzle') {       //load puzzle
         loadPuzzle(puzzleClicked.puzzleInt);
+    }
+    else if(puzzleClicked.action == 'previewPuzzle'){   //puzzle preview
+        previewPuzzle(puzzleClicked.puzzleInt);
     }
     else {                                           //delete puzzle
         deletePuzzle(puzzleClicked.puzzleInt);
@@ -117,6 +146,45 @@ function loadPuzzle(puzzleInt) {
     });
 }
 
+function previewPuzzle(puzzleInt) {
+    var puzzleInfo = { 'puzzleInt': puzzleInt };
+    var sendThis = JSON.stringify(puzzleInfo);
+    console.log(sendThis);
+    var promise = $.ajax({
+        url: '/sudokuObject',
+        type: 'GET',
+        data: sendThis,
+        contentType: 'application/json'
+    });
+    promise.done((data) => {
+        showPuzzlePreview(data);
+    });
+}
+
 function deletePuzzle(puzzleInt) {
+    $("#loadModal").show();
+    $("#actionModal").hide();
     console.log("deleting puzzle " + puzzleInt);
+    var puzzleInfo = { 'puzzleInt': puzzleInt };
+    var sendThis = JSON.stringify(puzzleInfo);
+    console.log(sendThis);
+    var promise = $.ajax({
+        url: '/deletePuzzle',
+        type: 'POST',
+        data: sendThis,
+        contentType: 'application/json'
+    });
+    promise.done((data) => {
+
+        console.log(' puzzle deleted promise done');
+        console.log(data);
+        window.location.href = "/puzzleList";
+        // $("#puzzleList").html("");
+        // displaySudokus(data);
+        
+    });
+}
+
+function showPuzzlePreview(sudoku){
+    
 }
