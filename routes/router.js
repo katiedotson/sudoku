@@ -29,9 +29,7 @@ router.get('/sudokuObject', (req, res) =>{
                 return;
             }
             if(sudokuPuzzles){
-                console.log("sudoku puzzles");
                 var sudoku = sudokuPuzzles.userPuzzles[req.session.puzzleInt];
-                console.log(sudoku);
                 req.session.puzzleInt = null;
                 res.json(sudoku);
             }
@@ -51,7 +49,6 @@ router.post('/sudokuObject', (req,res) =>{
 });
 
 router.post('/saveSudoku', (req, res) =>{
-    console.log("savePuzzle");
     if (!req.body) return res.sendStatus(400);
     if(req.session.user){
         SudokuPuzzles.findOne({userId : req.session.user}, (err, sudokuPuzzles)=>{
@@ -63,18 +60,13 @@ router.post('/saveSudoku', (req, res) =>{
                 var puzzleExists = false;
                 var puzzleLocation;
                 for(let i = 0; i < sudokuPuzzles.userPuzzles.length; i++){
-                    // console.log(sudokuPuzzles.userPuzzles[i].TimeCreated);
-                    // console.log(i);
                     if(sudokuPuzzles.userPuzzles[i].TimeCreated == req.body.TimeCreated){
                         puzzleExists = true;
                         puzzleLocation = i;
-                        // console.log(sudokuPuzzles.userPuzzles[i].NumberCompleted);
                         sudokuPuzzles.userPuzzles[i] = req.body;
-                        // console.log(sudokuPuzzles.userPuzzles[i].NumberCompleted);
                     }
                 } 
                 if(!puzzleExists){
-                    console.log("puzzle didn't exist");
                     sudokuPuzzles.userPuzzles.push(req.body);
                 }
                 sudokuPuzzles.update(sudokuPuzzles,(err, raw)=>{
@@ -97,7 +89,6 @@ router.post('/saveSudoku', (req, res) =>{
                     }
                     res.sendStatus(200);
                 });
-                console.log("check yr database");
             }});
     }
     else{
@@ -119,15 +110,12 @@ router.get('/account', (req, res)=>{
                 return;
             }
             if(sudokuPuzzles){
-                console.log("puzzle didn't exist from account function");
-                // console.log(req.session.sudoku);
                 sudokuPuzzles.userPuzzles.push(req.session.sudoku);
                 
                 sudokuPuzzles.update(sudokuPuzzles,(err, raw)=>{
                     if(err){
                         return console.log(err);
                     }
-                    console.log('The response from Mongo was ', raw);
                 });
             }
             else{
@@ -141,7 +129,6 @@ router.get('/account', (req, res)=>{
                         return console.log(err);
                     }
                 });
-                console.log("check yr database");
             }});
     }
     res.render('account');
@@ -163,8 +150,6 @@ router.get('/puzzleList', (req,res)=>{
 });
 
 router.get('/puzzleData', (req,res)=>{
-    console.log('get puzzle data');
-    console.log(req.session.user);
     SudokuPuzzles.findOne({userId : req.session.user}, (err, sudokuPuzzles)=>{
         if(err){
             console.log(err);
@@ -181,7 +166,6 @@ router.get('/puzzleData', (req,res)=>{
 
 router.post('/loadPuzzle', (req,res)=>{
     req.session.puzzleInt = req.body.puzzleInt;
-    console.log(req.session.puzzleInt);
     res.send('200');
 });
 
@@ -204,12 +188,6 @@ router.post('/deletePuzzle', (req, res) => {
             res.json(sudokuPuzzles);
         }
     });
-});
-
-router.get('/loadSudoku', (req,res)=>{
-    console.log('get sudoku');
-    console.log(req.session.puzzleInt);
-    res.end();
 });
 
 module.exports = router;
