@@ -1,42 +1,42 @@
 module.exports = createSudoku;
 
 //Sudoku object init
-function getSudokuObject(){
+function getSudokuObject() {
     var SudokuObject = {
-        "HasBeenSaved" : false,
+        "HasBeenSaved": false,
         "TimeCreated": getDate(),
-        "DidntWork": true, 
-        "Array": [], 
-        "NumberToShow": 17, 
-        "NumberShown": 0, 
-        "NumberCompleted" : 0,
+        "DidntWork": true,
+        "Array": [],
+        "NumberToShow": 17,
+        "NumberShown": 0,
+        "NumberCompleted": 0,
         "IncorrectInput": 0,
-        "BoxesClicked": 0, 
-        "HighlightColor": "#d3e4ff", 
-        "CompletedColor": "#6bffa5", 
-        "NotesMode": false, 
+        "BoxesClicked": 0,
+        "HighlightColor": "#d3e4ff",
+        "CompletedColor": "#6bffa5",
+        "NotesMode": false,
         "OopsMode": false,
-        "IdOfCurrentValue": "0", 
-        "Playing": false, 
-        "ColorMode": false, 
-        "HardMode": false, 
-        "CurrentValue": null, 
+        "IdOfCurrentValue": "0",
+        "Playing": false,
+        "ColorMode": false,
+        "HardMode": false,
+        "CurrentValue": null,
         "Hints": 3,
         "ColorArray":
-            [{ "Value": 1, "Color": "#f75df2" },
-            { "Value": 2, "Color": "#f42318" },
-            { "Value": 3, "Color": "#ffae00" },
-            { "Value": 4, "Color": "#f0f418" },
-            { "Value": 5, "Color": "#91e871" },
-            { "Value": 6, "Color": "#71e8a6" },
-            { "Value": 7, "Color": "#71e4e8" },
-            { "Value": 8, "Color": "#3cace0" },
-            { "Value": 9, "Color": "#a54df2" }]
+            [{ "Value": 1, "Color": "#70877F" },
+            { "Value": 2, "Color": "#454372" },
+            { "Value": 3, "Color": "#2F2963" },
+            { "Value": 4, "Color": "#FCB08A" },
+            { "Value": 5, "Color": "#8EE2B1" },
+            { "Value": 6, "Color": "#ADC7D6" },
+            { "Value": 7, "Color": "#725043" },
+            { "Value": 8, "Color": "#706D7C" },
+            { "Value": 9, "Color": "#D68B8B" }]
     };
     return SudokuObject;
 }
 
-function getDate(){
+function getDate() {
     var date = new Date();
     return date;
 }
@@ -280,5 +280,7 @@ function createSudoku() {
     while (newSudoku.DidntWork) {
         newSudoku = createSudokuArray();
     }
+    console.log(newSudoku);
+    console.log(newSudoku.Array);
     return newSudoku;
 }

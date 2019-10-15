@@ -3,11 +3,14 @@ body{
     font-family: 'Slabo 27px', serif;
     text-decoration: none;
 } 
+.game{
+    margin-left: 0 auto;
+}
 .puzzle{
-    position: relative;
     margin: auto;
     display: flex;
     background-color: black;
+    width: fit-content;
 }  
 .spot{
     background-color: rgb(255, 255, 255);
@@ -121,8 +124,8 @@ i{
     height: 50%;
 }
 .userNote{
-    height: 50%;
-    width: 50%;
+    height: 20px;
+    width: 20px;
     float: left;
     margin: none;
     margin-top: none;
